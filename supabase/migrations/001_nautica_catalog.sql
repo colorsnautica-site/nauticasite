@@ -96,30 +96,33 @@ begin
 end;
 $$;
 
+revoke execute on function public.store_catalog_set_updated_at()
+from public, anon, authenticated;
+
 drop trigger if exists trg_store_sites_updated_at on public.store_sites;
 create trigger trg_store_sites_updated_at
 before update on public.store_sites
-for each row execute function public.set_store_updated_at();
+for each row execute function public.store_catalog_set_updated_at();
 
 drop trigger if exists trg_store_brands_updated_at on public.store_brands;
 create trigger trg_store_brands_updated_at
 before update on public.store_brands
-for each row execute function public.set_store_updated_at();
+for each row execute function public.store_catalog_set_updated_at();
 
 drop trigger if exists trg_store_categories_updated_at on public.store_categories;
 create trigger trg_store_categories_updated_at
 before update on public.store_categories
-for each row execute function public.set_store_updated_at();
+for each row execute function public.store_catalog_set_updated_at();
 
 drop trigger if exists trg_store_products_updated_at on public.store_products;
 create trigger trg_store_products_updated_at
 before update on public.store_products
-for each row execute function public.set_store_updated_at();
+for each row execute function public.store_catalog_set_updated_at();
 
 drop trigger if exists trg_store_settings_updated_at on public.store_settings;
 create trigger trg_store_settings_updated_at
 before update on public.store_settings
-for each row execute function public.set_store_updated_at();
+for each row execute function public.store_catalog_set_updated_at();
 
 alter table public.store_sites enable row level security;
 alter table public.store_brands enable row level security;
