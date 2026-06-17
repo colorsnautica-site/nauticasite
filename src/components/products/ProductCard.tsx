@@ -10,9 +10,13 @@ export function ProductCard({ product }: { product: Product }) {
     <article className="group flex h-full flex-col rounded-[28px] border border-navy/10 bg-white p-3 shadow-sm transition hover:-translate-y-1 hover:shadow-soft">
       <Link
         href={`/produtos/${product.slug}`}
-        className="block rounded-3xl bg-sky p-6 transition group-hover:bg-mist"
+        className="block overflow-hidden rounded-3xl bg-sky p-6 transition group-hover:bg-mist"
       >
-        <ProductImage src={product.imageUrl} alt={product.name} className="mx-auto h-44 w-full object-contain" />
+        <ProductImage
+          src={product.imageUrl}
+          alt={product.name}
+          className="mx-auto h-44 w-full object-contain transition-transform duration-300 ease-nautica group-hover:scale-105"
+        />
       </Link>
       <div className="mt-4 flex flex-1 flex-col px-2">
         <p className="text-xs font-bold uppercase tracking-[0.18em] text-red">{product.brand?.name}</p>
