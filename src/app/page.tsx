@@ -2,6 +2,7 @@ import { Anchor, ArrowRight, Brush, CheckCircle2, MapPin, MessageCircle, Package
 import Link from "next/link";
 import { ProductCard } from "@/components/products/ProductCard";
 import { LinkButton } from "@/components/ui/Button";
+import { Reveal } from "@/components/ui/Reveal";
 import { getCatalog } from "@/lib/catalog/get-catalog";
 import { buildSupportMessage, resolveWhatsappNumber, whatsappUrl } from "@/lib/whatsapp";
 
@@ -50,12 +51,14 @@ export default async function HomePage() {
             [ShieldCheck, "Proteção de casco", "Antifouling, primers e acabamentos para manutenção náutica."],
             [Brush, "Preparação completa", "Abrasivos, polimento, limpeza e proteção no mesmo carrinho."],
             [PackageCheck, "Compra assistida", "Você seleciona os itens e confirma preço e disponibilidade com a loja."]
-          ].map(([Icon, title, text]) => (
-            <div key={String(title)} className="rounded-lg border border-navy/10 p-6">
-              <Icon className="mb-4 text-red" size={30} aria-hidden="true" />
-              <h2 className="font-heading text-xl font-bold text-navy">{String(title)}</h2>
-              <p className="mt-2 text-sm leading-6 text-ink/70">{String(text)}</p>
-            </div>
+          ].map(([Icon, title, text], index) => (
+            <Reveal key={String(title)} delay={index * 200} className="h-full">
+              <div className="h-full rounded-lg border border-navy/10 p-6">
+                <Icon className="mb-4 text-red" size={30} aria-hidden="true" />
+                <h2 className="font-heading text-xl font-bold text-navy">{String(title)}</h2>
+                <p className="mt-2 text-sm leading-6 text-ink/70">{String(text)}</p>
+              </div>
+            </Reveal>
           ))}
         </div>
       </section>
@@ -71,10 +74,12 @@ export default async function HomePage() {
           </div>
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {categories.map((category, index) => (
-              <Link key={category.id} href={`/produtos?categoria=${category.slug}`} className="group rounded-lg bg-white p-6 shadow-sm hover:shadow-soft">
-                <span className="grid h-11 w-11 place-items-center rounded-full bg-navy text-white">{index + 1}</span>
-                <h3 className="mt-5 font-heading text-2xl font-bold text-navy group-hover:text-red">{category.name}</h3>
-              </Link>
+              <Reveal key={category.id} delay={(index % 3) * 200} className="h-full">
+                <Link href={`/produtos?categoria=${category.slug}`} className="group block h-full rounded-lg bg-white p-6 shadow-sm transition-shadow hover:shadow-soft">
+                  <span className="grid h-11 w-11 place-items-center rounded-full bg-navy text-white">{index + 1}</span>
+                  <h3 className="mt-5 font-heading text-2xl font-bold text-navy group-hover:text-red">{category.name}</h3>
+                </Link>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -85,7 +90,11 @@ export default async function HomePage() {
           <p className="font-bold uppercase tracking-[0.2em] text-red">Destaques</p>
           <h2 className="mt-2 font-heading text-4xl font-extrabold text-navy">Produtos de referência para seu carrinho.</h2>
           <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {featured.map((product) => <ProductCard key={product.id} product={product} />)}
+            {featured.map((product, index) => (
+              <Reveal key={product.id} delay={(index % 4) * 180} className="h-full">
+                <ProductCard product={product} />
+              </Reveal>
+            ))}
           </div>
         </div>
       </section>
@@ -94,10 +103,12 @@ export default async function HomePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <p className="font-bold uppercase tracking-[0.2em] text-red">Marcas parceiras</p>
           <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-6">
-            {brands.map((brand) => (
-              <div key={brand.id} className="rounded-lg bg-white p-5 text-center font-heading text-xl font-bold text-navy shadow-sm">
-                {brand.name}
-              </div>
+            {brands.map((brand, index) => (
+              <Reveal key={brand.id} delay={(index % 6) * 120} className="h-full">
+                <div className="h-full rounded-lg bg-white p-5 text-center font-heading text-xl font-bold text-navy shadow-sm">
+                  {brand.name}
+                </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -119,11 +130,13 @@ export default async function HomePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-4xl font-extrabold text-navy">Como comprar pelo WhatsApp</h2>
           <div className="mt-8 grid gap-5 md:grid-cols-4">
-            {["Explore marcas e categorias.", "Adicione produtos ao carrinho.", "Envie a lista pelo WhatsApp.", "Confirme preço, estoque e condições."].map((step) => (
-              <div key={step} className="rounded-lg border border-navy/10 p-5">
-                <CheckCircle2 className="mb-4 text-red" aria-hidden="true" />
-                <p className="font-semibold text-navy">{step}</p>
-              </div>
+            {["Explore marcas e categorias.", "Adicione produtos ao carrinho.", "Envie a lista pelo WhatsApp.", "Confirme preço, estoque e condições."].map((step, index) => (
+              <Reveal key={step} delay={(index % 4) * 180} className="h-full">
+                <div className="h-full rounded-lg border border-navy/10 p-5">
+                  <CheckCircle2 className="mb-4 text-red" aria-hidden="true" />
+                  <p className="font-semibold text-navy">{step}</p>
+                </div>
+              </Reveal>
             ))}
           </div>
         </div>

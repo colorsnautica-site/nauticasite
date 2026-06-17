@@ -4,6 +4,7 @@ import { ChevronRight } from "lucide-react";
 import { ProductActionPanel } from "@/components/cart/ProductActionPanel";
 import { ProductCard } from "@/components/products/ProductCard";
 import { ProductImage } from "@/components/ui/ProductImage";
+import { Reveal } from "@/components/ui/Reveal";
 import { formatCurrency } from "@/lib/currency";
 import { getCatalog } from "@/lib/catalog/get-catalog";
 import { getProductBySlug } from "@/lib/catalog/get-product-by-slug";
@@ -72,7 +73,11 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <h2 className="font-heading text-3xl font-extrabold text-navy">Produtos relacionados</h2>
           <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {related.map((item) => <ProductCard key={item.id} product={item} />)}
+            {related.map((item, index) => (
+              <Reveal key={item.id} delay={(index % 4) * 180} className="h-full">
+                <ProductCard product={item} />
+              </Reveal>
+            ))}
           </div>
         </div>
       </section>

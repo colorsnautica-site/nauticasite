@@ -4,6 +4,7 @@ import { useMemo, useState, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Search, SlidersHorizontal, X } from "lucide-react";
 import { ProductCard } from "@/components/products/ProductCard";
+import { Reveal } from "@/components/ui/Reveal";
 import type { Brand, Category, Product } from "@/types/catalog";
 
 type Sort = "featured" | "price-asc" | "price-desc" | "alpha";
@@ -126,7 +127,11 @@ export function CatalogClient({ products, brands, categories }: { products: Prod
 
       {filtered.length > 0 ? (
         <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {filtered.map((product) => <ProductCard key={product.id} product={product} />)}
+          {filtered.map((product, index) => (
+            <Reveal key={product.id} delay={(index % 4) * 180} className="h-full">
+              <ProductCard product={product} />
+            </Reveal>
+          ))}
         </div>
       ) : (
         <div className="mt-8 rounded-lg bg-white p-12 text-center shadow-soft">
