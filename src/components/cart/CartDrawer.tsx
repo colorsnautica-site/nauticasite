@@ -63,8 +63,17 @@ export function CartDrawer({ settings }: { settings: Record<string, string> }) {
                 </div>
               ) : (
                 <ul className="space-y-4">
-                  {items.map((item) => (
-                    <li key={item.productId} className="rounded-lg border border-navy/10 p-3">
+                  <AnimatePresence>
+                    {items.map((item, index) => (
+                    <motion.li
+                      key={item.productId}
+                      layout
+                      initial={{ opacity: 0, y: reduce ? 0 : 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: reduce ? 1 : 0.96 }}
+                      transition={{ duration: reduce ? 0 : 0.3, ease, delay: reduce ? 0 : index * 0.05 }}
+                      className="rounded-lg border border-navy/10 p-3"
+                    >
                       <div className="flex gap-3">
                         <ProductImage src={item.imageUrl} alt={item.name} className="h-20 w-20 rounded-md bg-off-white object-contain p-2" />
                         <div className="min-w-0 flex-1">
@@ -82,8 +91,9 @@ export function CartDrawer({ settings }: { settings: Record<string, string> }) {
                         <QuantityPicker value={item.quantity} onChange={(value) => updateQuantity(item.productId, value)} />
                         <span className="text-sm font-semibold text-navy">{formatCurrency(item.priceCents * item.quantity)}</span>
                       </div>
-                    </li>
-                  ))}
+                    </motion.li>
+                    ))}
+                  </AnimatePresence>
                 </ul>
               )}
             </div>
