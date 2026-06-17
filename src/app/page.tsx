@@ -1,8 +1,6 @@
-import { Anchor, ArrowRight, Brush, CheckCircle2, MapPin, MessageCircle, PackageCheck, ShieldCheck } from "lucide-react";
+import { Anchor, Brush, CheckCircle2, MapPin, MessageCircle, PackageCheck, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import { ProductCard } from "@/components/products/ProductCard";
-import { LinkButton } from "@/components/ui/Button";
-import { Parallax } from "@/components/ui/Parallax";
 import { Reveal } from "@/components/ui/Reveal";
 import { getCatalog } from "@/lib/catalog/get-catalog";
 import { buildSupportMessage, resolveWhatsappNumber, whatsappUrl } from "@/lib/whatsapp";
@@ -14,58 +12,44 @@ export default async function HomePage() {
 
   return (
     <main>
-      <section className="wave-panel bg-navy text-white">
-        <div className="relative z-10 mx-auto grid min-h-[680px] max-w-7xl items-center gap-10 px-4 py-16 sm:px-6 lg:grid-cols-[1fr_0.9fr] lg:px-8">
-          <div>
-            <p className="mb-5 inline-flex animate-fade-up rounded-full bg-white/10 px-4 py-2 text-sm font-semibold text-white">Tudo que seu barco precisa, você encontra aqui.</p>
-            <h1 className="max-w-4xl animate-fade-up font-heading text-5xl font-extrabold leading-[1.02] [animation-delay:80ms] sm:text-6xl lg:text-7xl">Proteção e performance para sua embarcação.</h1>
-            <p className="mt-7 max-w-2xl animate-fade-up text-lg leading-8 text-white/78 [animation-delay:160ms]">
-              Tintas, acabamentos, abrasivos e soluções de alta performance para preservar o valor, a estética e o prestígio do seu barco.
-            </p>
-            <div className="mt-9 flex animate-fade-up flex-col gap-3 [animation-delay:240ms] sm:flex-row">
-              <LinkButton href="/produtos" className="group duration-300 ease-nautica hover:-translate-y-0.5 hover:shadow-soft">
-                Explorar produtos
-                <ArrowRight size={18} aria-hidden="true" className="transition-transform duration-300 ease-nautica group-hover:translate-x-1" />
-              </LinkButton>
-              <a href={supportUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-navy transition duration-300 ease-nautica hover:-translate-y-0.5 hover:bg-off-white hover:shadow-soft">
-                <MessageCircle size={18} aria-hidden="true" /> Falar com um especialista
-              </a>
-            </div>
-          </div>
-          <Parallax>
-            <div className="relative mx-auto aspect-[4/3] w-full max-w-xl animate-fade-up [animation-delay:320ms]">
-              <div className="absolute inset-0 rounded-[42px] bg-white/10" />
-              <div className="absolute left-8 top-10 h-60 w-40 rounded-t-[90px] rounded-b-2xl bg-white p-5 shadow-2xl">
-                <div className="h-24 rounded-t-[70px] bg-red" />
-                <div className="mt-5 h-5 rounded bg-navy" />
-                <div className="mt-3 h-3 w-24 rounded bg-navy/25" />
-              </div>
-              <div className="absolute bottom-10 right-5 h-72 w-52 rounded-t-[110px] rounded-b-2xl bg-white p-6 shadow-2xl">
-                <div className="h-32 rounded-t-[90px] bg-navy-light" />
-                <div className="mt-6 h-5 rounded bg-red" />
-                <div className="mt-3 h-3 w-28 rounded bg-navy/25" />
-              </div>
-              <div className="absolute bottom-20 left-0 right-0 h-24 rounded-[100%] border-b-[18px] border-red" />
-            </div>
-          </Parallax>
-        </div>
-      </section>
+      <section className="relative isolate overflow-hidden bg-navy text-white">
+        {/*
+          Foto de fundo do hero (full-bleed).
+          TODO(admin): a imagem será gerenciada pelo futuro painel administrativo,
+          via a configuração `hero_image_url` (store_settings). Enquanto o admin não
+          existir, cai no arquivo local /hero/hero.jpg e, na falta dele, no fundo navy.
+        */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 -z-20 bg-navy bg-cover bg-center"
+          style={{ backgroundImage: `url('${settings.hero_image_url || "/hero/hero.jpg"}')` }}
+        />
+        {/* Overlay para legibilidade do texto sobre a foto */}
+        <div aria-hidden="true" className="absolute inset-0 -z-10 bg-gradient-to-b from-navy/85 via-navy/55 to-navy/90" />
 
-      <section className="bg-white py-10">
-        <div className="mx-auto grid max-w-7xl gap-4 px-4 sm:px-6 md:grid-cols-3 lg:px-8">
-          {[
-            [ShieldCheck, "Proteção de casco", "Antifouling, primers e acabamentos para manutenção náutica."],
-            [Brush, "Preparação completa", "Abrasivos, polimento, limpeza e proteção no mesmo carrinho."],
-            [PackageCheck, "Compra assistida", "Você seleciona os itens e confirma preço e disponibilidade com a loja."]
-          ].map(([Icon, title, text], index) => (
-            <Reveal key={String(title)} delay={index * 200} className="h-full">
-              <div className="h-full rounded-lg border border-navy/10 p-6">
-                <Icon className="mb-4 text-red" size={30} aria-hidden="true" />
-                <h2 className="font-heading text-xl font-bold text-navy">{String(title)}</h2>
-                <p className="mt-2 text-sm leading-6 text-ink/70">{String(text)}</p>
+        <div className="mx-auto flex min-h-[680px] max-w-5xl flex-col items-center px-4 pb-20 pt-24 text-center sm:px-6 lg:px-8">
+          <p className="mb-5 inline-flex animate-fade-up rounded-full bg-white/10 px-4 py-2 text-xs font-semibold text-white">Tudo que seu barco precisa, você encontra aqui.</p>
+          <h1 className="mx-auto max-w-2xl animate-fade-up font-heading text-3xl font-extrabold leading-[1.1] [animation-delay:80ms] sm:text-4xl lg:text-5xl">Proteção e performance<br />para sua embarcação.</h1>
+          <p className="mx-auto mt-5 max-w-lg animate-fade-up text-sm leading-6 text-white/80 [animation-delay:160ms]">
+            Tintas, acabamentos, abrasivos e soluções de alta performance para preservar o valor, a estética e o prestígio do seu barco.
+          </p>
+          <div className="mt-14 grid w-full gap-8 sm:grid-cols-3">
+            {[
+              [ShieldCheck, "Proteção de casco", "Antifouling, primers e acabamentos para manutenção náutica."],
+              [Brush, "Preparação completa", "Abrasivos, polimento, limpeza e proteção no mesmo carrinho."],
+              [PackageCheck, "Compra assistida", "Você seleciona os itens e confirma preço e disponibilidade com a loja."]
+            ].map(([Icon, title, text], index) => (
+              <div
+                key={String(title)}
+                className="flex animate-fade-up flex-col items-center px-2"
+                style={{ animationDelay: `${240 + index * 80}ms` }}
+              >
+                <Icon className="mb-3 text-red" size={30} aria-hidden="true" />
+                <h2 className="font-heading text-lg font-bold text-white">{String(title)}</h2>
+                <p className="mt-2 text-sm leading-6 text-white/75">{String(text)}</p>
               </div>
-            </Reveal>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 
