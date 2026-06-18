@@ -9,12 +9,14 @@ export function ProductImage({
   src,
   alt,
   className = "",
-  loading = "lazy"
+  loading = "lazy",
+  fit = "contain"
 }: {
   src?: string | null;
   alt: string;
   className?: string;
   loading?: "eager" | "lazy";
+  fit?: "contain" | "cover";
 }) {
   const [imageSrc, setImageSrc] = useState(productImage(src));
   const [loaded, setLoaded] = useState(false);
@@ -43,7 +45,7 @@ export function ProductImage({
           setImageSrc(FALLBACK_IMAGE);
           setLoaded(true);
         }}
-        className={`h-full w-full object-contain transition-opacity duration-500 ${loaded ? "opacity-100" : "opacity-0"}`}
+        className={`h-full w-full transition-opacity duration-500 ${fit === "cover" ? "object-cover" : "object-contain"} ${loaded ? "opacity-100" : "opacity-0"}`}
       />
     </span>
   );

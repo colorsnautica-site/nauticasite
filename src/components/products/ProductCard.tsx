@@ -13,15 +13,16 @@ export function ProductCard({ product, compact = false }: { product: Product; co
     <article className="group flex h-full flex-col rounded-[28px] border border-navy/10 bg-white p-3 shadow-sm transition hover:-translate-y-1 hover:border-red/20 hover:shadow-soft">
       <Link
         href={`/produtos/${product.slug}`}
-        className={`relative block overflow-hidden rounded-3xl bg-sky transition group-hover:bg-mist ${compact ? "p-4" : "p-6"}`}
+        className={`relative block overflow-hidden rounded-3xl bg-sky transition group-hover:bg-mist ${compact ? "p-0" : "p-6"}`}
       >
-        <span className={`absolute right-3 top-3 rounded-full px-2.5 py-1 text-[11px] font-semibold ${stockBadge}`}>
+        <span className={`absolute right-3 top-3 z-10 rounded-full px-2.5 py-1 text-[11px] font-semibold ${stockBadge}`}>
           {stockLabel}
         </span>
         <ProductImage
           src={product.imageUrl}
           alt={product.name}
-          className={`mx-auto w-full object-contain transition-transform duration-300 ease-nautica group-hover:scale-105 ${compact ? "h-24" : "h-44"}`}
+          fit={compact ? "cover" : "contain"}
+          className={`w-full transition-transform duration-300 ease-nautica group-hover:scale-105 ${compact ? "h-32" : "mx-auto h-44"}`}
         />
       </Link>
       <div className={`flex flex-1 flex-col px-2 ${compact ? "mt-3" : "mt-4"}`}>
