@@ -21,10 +21,10 @@ export function ProductCard({ product, compact = false }: { product: Product; co
         <ProductImage
           src={product.imageUrl}
           alt={product.name}
-          className={`mx-auto w-full object-contain transition-transform duration-300 ease-nautica group-hover:scale-105 ${compact ? "h-28" : "h-44"}`}
+          className={`mx-auto w-full object-contain transition-transform duration-300 ease-nautica group-hover:scale-105 ${compact ? "h-24" : "h-44"}`}
         />
       </Link>
-      <div className="mt-4 flex flex-1 flex-col px-2">
+      <div className={`flex flex-1 flex-col px-2 ${compact ? "mt-3" : "mt-4"}`}>
         <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
           <span className="text-xs font-bold uppercase tracking-[0.18em] text-red">{product.brand?.name}</span>
           {product.category?.name ? (
@@ -34,15 +34,15 @@ export function ProductCard({ product, compact = false }: { product: Product; co
         <h2 className={`mt-1.5 font-heading font-bold leading-tight text-navy ${compact ? "text-base" : "text-lg"}`}>
           <Link href={`/produtos/${product.slug}`} className="hover:text-red">{product.name}</Link>
         </h2>
-        <p className={`mt-2 flex-1 text-sm leading-6 text-ink/70 ${compact ? "line-clamp-2" : ""}`}>{product.shortDescription}</p>
-        <div className="mt-4 flex items-end justify-between gap-2 border-t border-navy/10 pt-4">
+        <p className={`mt-2 flex-1 text-sm leading-6 text-ink/70 ${compact ? "line-clamp-1" : ""}`}>{product.shortDescription}</p>
+        <div className={`flex items-end justify-between gap-2 border-t border-navy/10 ${compact ? "mt-3 pt-3" : "mt-4 pt-4"}`}>
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-wide text-ink/45">Preço de referência</p>
             <p className={`mt-0.5 font-heading font-bold text-ink ${compact ? "text-xl" : "text-2xl"}`}>{formatCurrency(product.priceCents)}</p>
           </div>
           <span className="pb-1 text-xs font-semibold text-ink/55">{product.unit}</span>
         </div>
-        <div className="mt-4 flex items-center gap-2">
+        <div className={`flex items-center gap-2 ${compact ? "mt-3" : "mt-4"}`}>
           <CartStepper product={product} className="flex-1" />
           <Link
             href={`/produtos/${product.slug}`}
