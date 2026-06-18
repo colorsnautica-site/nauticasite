@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { CatalogClient } from "@/components/catalog/CatalogClient";
 import { getCatalog } from "@/lib/catalog/get-catalog";
+import { buildSupportMessage, resolveWhatsappNumber, whatsappUrl } from "@/lib/whatsapp";
 
 export const metadata = {
   title: "Produtos | Náutica Color",
@@ -8,7 +9,8 @@ export const metadata = {
 };
 
 export default async function ProductsPage() {
-  const { products, brands, categories } = await getCatalog();
+  const { products, brands, categories, settings } = await getCatalog();
+  const supportUrl = whatsappUrl(buildSupportMessage(), resolveWhatsappNumber(settings));
 
   return (
     <main>
@@ -22,7 +24,7 @@ export default async function ProductsPage() {
         </div>
       </section>
       <Suspense fallback={<div className="mx-auto max-w-7xl px-4 py-16">Carregando produtos...</div>}>
-        <CatalogClient products={products} brands={brands} categories={categories} />
+        <CatalogClient products={products} brands={brands} categories={categories} supportUrl={supportUrl} />
       </Suspense>
     </main>
   );

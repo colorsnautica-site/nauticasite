@@ -1,15 +1,26 @@
 "use client";
 
 import { useMemo, useState, useTransition } from "react";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ArrowRight, Search, SlidersHorizontal, X } from "lucide-react";
+import { ArrowRight, Brush, LifeBuoy, MessageCircle, Search, ShieldCheck, SlidersHorizontal, Sparkles, X } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ProductCard } from "@/components/products/ProductCard";
 import type { Brand, Category, Product } from "@/types/catalog";
 
 type Sort = "featured" | "price-asc" | "price-desc" | "alpha";
 
-export function CatalogClient({ products, brands, categories }: { products: Product[]; brands: Brand[]; categories: Category[] }) {
+export function CatalogClient({
+  products,
+  brands,
+  categories,
+  supportUrl
+}: {
+  products: Product[];
+  brands: Brand[];
+  categories: Category[];
+  supportUrl: string;
+}) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
@@ -20,6 +31,26 @@ export function CatalogClient({ products, brands, categories }: { products: Prod
   const reduce = useReducedMotion();
   const ease = [0.16, 1, 0.3, 1] as const;
   const activeFilters = [query.trim(), brand, category].filter(Boolean).length;
+  const buyingGuides = [
+    {
+      icon: ShieldCheck,
+      title: "Casco e obra viva",
+      text: "Antifouling, primers e preparação para proteção abaixo da linha d'água.",
+      href: "/produtos?categoria=antifouling"
+    },
+    {
+      icon: Brush,
+      title: "Acabamento e brilho",
+      text: "Vernizes, tintas, polimento e limpeza para manter aparência e proteção.",
+      href: "/produtos?categoria=vernizes-e-acabamentos"
+    },
+    {
+      icon: Sparkles,
+      title: "Fibra e reparos",
+      text: "Gelcoat, resinas, tecidos e abrasivos para correções e preparação.",
+      href: "/produtos?categoria=fiberglass-e-compositos"
+    }
+  ];
 
   function updateUrl(next: { q?: string; marca?: string; categoria?: string; ordem?: string }) {
     const params = new URLSearchParams(searchParams.toString());
@@ -163,6 +194,35 @@ export function CatalogClient({ products, brands, categories }: { products: Prod
             <X size={16} aria-hidden="true" /> Limpar
           </button>
         </div>
+      </div>
+
+      <div className="mt-6 grid gap-4 lg:grid-cols-[1fr_1fr_1fr_0.9fr]">
+        {buyingGuides.map((guide) => {
+          const Icon = guide.icon;
+          return (
+            <Link key={guide.title} href={guide.href} className="group rounded-lg bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-soft">
+              <Icon className="text-red" size={26} aria-hidden="true" />
+              <h2 className="mt-4 font-heading text-xl font-bold text-navy group-hover:text-red">{guide.title}</h2>
+              <p className="mt-2 text-sm leading-6 text-ink/70">{guide.text}</p>
+              <span className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-red">
+                Ver produtos <ArrowRight size={16} aria-hidden="true" />
+              </span>
+            </Link>
+          );
+        })}
+        <a
+          href={supportUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="rounded-lg bg-navy p-5 text-white shadow-soft transition hover:bg-navy-light"
+        >
+          <LifeBuoy className="text-red" size={26} aria-hidden="true" />
+          <h2 className="mt-4 font-heading text-xl font-bold">Não sabe por onde começar?</h2>
+          <p className="mt-2 text-sm leading-6 text-white/75">Fale com a equipe para validar aplicação, rendimento, estoque e preço antes de comprar.</p>
+          <span className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-white">
+            <MessageCircle size={16} aria-hidden="true" /> Pedir indicação
+          </span>
+        </a>
       </div>
 
       <div className="mt-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">

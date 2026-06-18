@@ -77,7 +77,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
         <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
           <div className="rounded-3xl bg-sky p-8 shadow-soft">
-            <ProductImage src={product.imageUrl} alt={product.name} className="mx-auto h-[420px] w-full object-contain" />
+            <ProductImage src={product.imageUrl} alt={product.name} loading="eager" className="mx-auto h-[420px] w-full object-contain" />
           </div>
           <div>
             <p className="font-bold uppercase tracking-[0.2em] text-red">{product.brand?.name}</p>

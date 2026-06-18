@@ -5,13 +5,28 @@
 import { useEffect, useRef, useState } from "react";
 import { FALLBACK_IMAGE, productImage } from "@/lib/images";
 
-export function ProductImage({ src, alt, className = "" }: { src?: string | null; alt: string; className?: string }) {
+export function ProductImage({
+  src,
+  alt,
+  className = "",
+  loading = "lazy"
+}: {
+  src?: string | null;
+  alt: string;
+  className?: string;
+  loading?: "eager" | "lazy";
+}) {
   const [imageSrc, setImageSrc] = useState(productImage(src));
   const [loaded, setLoaded] = useState(false);
   const ref = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
-    // Imagens em cache podem já estar completas antes do onLoad disparar.
+    setImageSrc(productImage(src));
+    setLoaded(false);
+  }, [src]);
+
+  useEffect(() => {
+    // Cached images can complete before onLoad fires.
     if (ref.current?.complete && ref.current.naturalWidth > 0) setLoaded(true);
   }, [imageSrc]);
 
@@ -22,7 +37,7 @@ export function ProductImage({ src, alt, className = "" }: { src?: string | null
         ref={ref}
         src={imageSrc}
         alt={alt}
-        loading="lazy"
+        loading={loading}
         onLoad={() => setLoaded(true)}
         onError={() => {
           setImageSrc(FALLBACK_IMAGE);
