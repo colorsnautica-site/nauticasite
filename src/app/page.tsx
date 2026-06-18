@@ -5,12 +5,10 @@ import {
   ClipboardCheck,
   Droplets,
   Layers,
-  LifeBuoy,
   MapPin,
   MessageCircle,
   PaintBucket,
   ShieldCheck,
-  Sparkles,
   Wrench
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -26,7 +24,6 @@ export default async function HomePage() {
   const { brands, categories, products, settings } = await getCatalog();
   const featured = products.filter((product) => product.featured).slice(0, 8);
   const supportUrl = whatsappUrl(buildSupportMessage(), resolveWhatsappNumber(settings));
-  const categoryPreview = categories.slice(0, 5);
   // Identidade visual por categoria (ícone + descrição), com fallback seguro
   // para slugs que não estiverem mapeados.
   const categoryMeta: Record<string, { icon: LucideIcon; blurb: string }> = {
@@ -37,44 +34,6 @@ export default async function HomePage() {
     "fiberglass-e-compositos": { icon: Layers, blurb: "Gelcoat, resinas e tecidos para reparos em fibra." },
     "limpeza-protecao-e-polimento": { icon: Droplets, blurb: "Massas, boinas e produtos para corte, brilho e proteção." }
   };
-  const solutionGuides = [
-    {
-      icon: ShieldCheck,
-      title: "Proteção de casco",
-      text: "Antifouling, primers e revestimentos para reduzir incrustação e proteger a obra viva.",
-      href: "/produtos?categoria=antifouling"
-    },
-    {
-      icon: Brush,
-      title: "Pintura e acabamento",
-      text: "Tintas, vernizes e complementos para acabamento externo, brilho e manutenção estética.",
-      href: "/produtos?categoria=vernizes-e-acabamentos"
-    },
-    {
-      icon: Wrench,
-      title: "Preparo de superfície",
-      text: "Lixas, abrasivos e produtos para deixar a superfície pronta antes da aplicação.",
-      href: "/produtos?categoria=lixas-e-abrasivos"
-    },
-    {
-      icon: Droplets,
-      title: "Limpeza e polimento",
-      text: "Produtos para corte, brilho, proteção e manutenção depois do uso.",
-      href: "/produtos?categoria=limpeza-protecao-e-polimento"
-    },
-    {
-      icon: Sparkles,
-      title: "Fibra e reparos",
-      text: "Gelcoat, resinas e reforços para pequenos reparos e trabalhos em compósitos.",
-      href: "/produtos?categoria=fiberglass-e-compositos"
-    },
-    {
-      icon: LifeBuoy,
-      title: "Compra assistida",
-      text: "Monte uma lista e confirme aplicação, preço e disponibilidade com a equipe.",
-      href: "/#como-comprar"
-    }
-  ];
 
   return (
     <main>
@@ -133,31 +92,11 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="border-b border-navy/10 bg-white py-6" aria-label="Categorias principais">
-        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 sm:px-6 lg:flex-row lg:items-center lg:px-8">
-          <Eyebrow className="shrink-0">Comprar por categoria</Eyebrow>
-          <div className="flex flex-wrap gap-2">
-            {categoryPreview.map((category) => (
-              <Link key={category.id} href={`/produtos?categoria=${category.slug}`} className="rounded-full bg-sky px-4 py-2 text-sm font-semibold text-navy transition hover:bg-navy hover:text-white">
-                {category.name}
-              </Link>
-            ))}
-            <Link href="/produtos" className="rounded-full bg-red px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-bright">
-              Ver tudo
-            </Link>
-          </div>
-        </div>
-      </section>
-
       <section className="py-20" id="categorias">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
             <div className="max-w-2xl">
               <Eyebrow>Categorias</Eyebrow>
-              <h2 className="mt-3 font-heading text-3xl font-extrabold leading-tight text-navy sm:text-4xl">Linhas para cada etapa da manutenção.</h2>
-              <p className="mt-4 text-ink/70">
-                A navegação foi pensada para quem precisa encontrar rápido o produto certo para casco, acabamento, reparo ou polimento.
-              </p>
             </div>
             <Link href="/produtos" className="inline-flex items-center gap-2 font-semibold text-navy transition hover:text-red">
               Ver catálogo completo <ArrowRight size={16} aria-hidden="true" />
@@ -180,35 +119,6 @@ export default async function HomePage() {
                     </p>
                     <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-red">
                       Explorar <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" aria-hidden="true" />
-                    </span>
-                  </Link>
-                </Reveal>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      <section className="relative isolate overflow-hidden bg-navy py-20 text-white">
-        <div aria-hidden="true" className="absolute -left-24 top-10 -z-10 h-72 w-72 rounded-full bg-red/15 blur-3xl" />
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl">
-            <Eyebrow tone="light">Guias rápidos</Eyebrow>
-            <h2 className="mt-3 font-heading text-3xl font-extrabold sm:text-4xl">Encontre pela aplicação, não só pelo nome do produto.</h2>
-          </div>
-          <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {solutionGuides.map((guide, index) => {
-              const Icon = guide.icon;
-              return (
-                <Reveal key={guide.title} delay={(index % 3) * 160} className="h-full">
-                  <Link href={guide.href} className="group flex h-full flex-col rounded-lg border border-white/10 bg-white/10 p-6 transition hover:-translate-y-1 hover:bg-white hover:text-navy">
-                    <span className="grid h-12 w-12 place-items-center rounded-full bg-white/10 transition-colors group-hover:bg-red/10">
-                      <Icon className="text-red" size={26} aria-hidden="true" />
-                    </span>
-                    <h3 className="mt-5 font-heading text-xl font-bold">{guide.title}</h3>
-                    <p className="mt-3 flex-1 text-sm leading-6 text-white/70 group-hover:text-ink/70">{guide.text}</p>
-                    <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-white group-hover:text-red">
-                      Ver soluções <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" aria-hidden="true" />
                     </span>
                   </Link>
                 </Reveal>
@@ -242,12 +152,12 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="py-20">
+      <section id="como-comprar" className="py-20">
         <div className="mx-auto grid max-w-7xl gap-6 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
           <Reveal className="h-full">
             <div className="h-full rounded-lg bg-white p-8 shadow-soft">
               <ClipboardCheck className="mb-5 text-red" size={34} aria-hidden="true" />
-              <Eyebrow>Compra assistida</Eyebrow>
+              <Eyebrow>Como comprar</Eyebrow>
               <h2 className="mt-3 font-heading text-3xl font-extrabold leading-tight text-navy sm:text-4xl">O site ajuda a montar a lista. A equipe confirma o produto certo.</h2>
               <p className="mt-4 text-ink/70">
                 Produtos náuticos dependem de superfície, aplicação, rendimento, preparação e disponibilidade. Por isso o carrinho vira uma solicitação de orçamento pelo WhatsApp.
@@ -285,36 +195,6 @@ export default async function HomePage() {
               <Reveal key={brand.id} delay={(index % 6) * 120} className="h-full">
                 <div className="grid h-full place-items-center rounded-lg bg-white p-6 text-center font-heading text-xl font-bold text-navy shadow-sm ring-1 ring-navy/5 transition-all hover:-translate-y-1 hover:text-red hover:shadow-soft">
                   {brand.name}
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="relative isolate overflow-hidden bg-navy py-20 text-white">
-        <div aria-hidden="true" className="absolute -right-20 bottom-0 -z-10 h-72 w-72 rounded-full bg-red/15 blur-3xl" />
-        <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
-          <div>
-            <Eyebrow tone="light">Náutica Color</Eyebrow>
-            <h2 className="mt-3 font-heading text-3xl font-extrabold sm:text-4xl">Mais do que pintura, é sobre preservar valor, estética e prestígio.</h2>
-          </div>
-          <p className="text-lg leading-8 text-white/75">
-            Um catálogo focado em soluções para embarcações, preparado para consulta rápida, montagem do carrinho e atendimento direto pela equipe da loja.
-          </p>
-        </div>
-      </section>
-
-      <section id="como-comprar" className="bg-white py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <Eyebrow>Passo a passo</Eyebrow>
-          <h2 className="mt-3 font-heading text-3xl font-extrabold text-navy sm:text-4xl">Como comprar pelo WhatsApp</h2>
-          <div className="mt-10 grid gap-5 md:grid-cols-4">
-            {["Explore marcas e categorias.", "Adicione produtos ao carrinho.", "Envie a lista pelo WhatsApp.", "Confirme preço, estoque e condições."].map((step, index) => (
-              <Reveal key={step} delay={(index % 4) * 180} className="h-full">
-                <div className="relative h-full rounded-lg border border-navy/10 p-6 transition-shadow hover:shadow-soft">
-                  <span className="grid h-10 w-10 place-items-center rounded-full bg-navy font-heading text-base font-bold text-white">{index + 1}</span>
-                  <p className="mt-4 font-semibold text-navy">{step}</p>
                 </div>
               </Reveal>
             ))}
