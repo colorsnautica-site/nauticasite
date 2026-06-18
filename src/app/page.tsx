@@ -82,24 +82,24 @@ export default async function HomePage() {
         {/* Brilho náutico sutil para dar profundidade */}
         <div aria-hidden="true" className="absolute -right-24 top-4 -z-10 h-80 w-80 rounded-full bg-red/20 blur-3xl" />
 
-        <div className="mx-auto flex min-h-[600px] max-w-7xl flex-col justify-center gap-8 px-4 pb-28 pt-24 sm:px-6 lg:px-8">
-          <div className="max-w-3xl">
+        <div className="mx-auto flex min-h-[600px] max-w-7xl flex-col items-center justify-center gap-8 px-4 pb-28 pt-24 text-center sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-3xl">
             <p className="mb-5 inline-flex animate-fade-up items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-white/80">
               <Anchor size={14} aria-hidden="true" /> Náutica Color
             </p>
-            <h1 className="animate-fade-up font-heading text-4xl font-extrabold leading-[1.05] [animation-delay:80ms] sm:text-5xl lg:text-6xl">
+            <h1 className="animate-fade-up font-heading text-3xl font-extrabold leading-[1.1] [animation-delay:80ms] sm:text-4xl lg:text-5xl">
               Tudo para a manutenção da sua embarcação.
             </h1>
-            <p className="mt-5 max-w-xl animate-fade-up text-base leading-7 text-white/80 [animation-delay:160ms]">
+            <p className="mx-auto mt-5 max-w-xl animate-fade-up text-base leading-7 text-white/80 [animation-delay:160ms]">
               Tintas, antifouling, acabamentos e abrasivos de alta performance. Encontre o produto certo e monte seu orçamento em minutos.
             </p>
           </div>
 
-          <div className="animate-fade-up [animation-delay:220ms]">
+          <div className="w-full max-w-2xl animate-fade-up [animation-delay:220ms]">
             <HeroSearch categories={categories} />
           </div>
 
-          <div className="flex animate-fade-up flex-wrap items-center gap-x-7 gap-y-3 text-sm text-white/75 [animation-delay:300ms]">
+          <div className="flex animate-fade-up flex-wrap items-center justify-center gap-x-7 gap-y-3 text-sm text-white/75 [animation-delay:300ms]">
             {[
               [ShieldCheck, "Linha profissional"],
               [MessageCircle, "Orçamento pelo WhatsApp"],

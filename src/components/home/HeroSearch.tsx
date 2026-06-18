@@ -21,7 +21,7 @@ export function HeroSearch({ categories }: { categories: Category[] }) {
   }
 
   return (
-    <div className="w-full max-w-2xl">
+    <div className="mx-auto w-full max-w-2xl">
       <form
         onSubmit={submit}
         className="flex items-center gap-2 rounded-full border border-white/20 bg-white/95 p-2 shadow-soft backdrop-blur"
@@ -47,7 +47,7 @@ export function HeroSearch({ categories }: { categories: Category[] }) {
         </button>
       </form>
 
-      <div className="mt-4 flex flex-wrap items-center gap-2">
+      <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
         <span className="text-xs font-semibold uppercase tracking-[0.18em] text-white/60">Atalhos</span>
         {categories.slice(0, 5).map((category) => (
           <Link
