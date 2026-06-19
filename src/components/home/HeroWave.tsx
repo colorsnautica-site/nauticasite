@@ -7,7 +7,8 @@ import { useEffect, useRef } from "react";
  * horizontal em velocidades diferentes (CSS `wave-move-forever`, definido em
  * globals.css), criando profundidade. As cores seguem a paleta da Náutica:
  * camadas de trás em azul-claro da marca (sky/mist) sobre o navy do hero e a
- * camada da frente em branco, que funde com a seção branca abaixo.
+ * camada da frente em off-white (#EDECEC), igual ao fundo do body, para fundir
+ * com a seção abaixo sem deixar linha de emenda.
  *
  * O movimento vertical (sobe/desce) acompanha o scroll do usuário e respeita
  * `prefers-reduced-motion` (tratado globalmente em globals.css).
@@ -64,11 +65,11 @@ export function HeroWave() {
           <g className="hero-waves">
             <use href="#gentle-wave" x="80" y="0" fill="#E8F0FA" fillOpacity="0.2" />
             <use href="#gentle-wave" x="40" y="3" fill="#D7E5F4" fillOpacity="0.5" />
-            <use href="#gentle-wave" x="40" y="6" fill="#ffffff" />
+            <use href="#gentle-wave" x="40" y="6" fill="#EDECEC" />
           </g>
         </svg>
       </div>
-      <div className="absolute inset-x-0 bottom-0 h-7 bg-white" />
+      <div className="absolute inset-x-0 bottom-0 h-7 bg-off-white" />
     </div>
   );
 }
