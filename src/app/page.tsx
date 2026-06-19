@@ -14,6 +14,7 @@ import type { LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { HeroSearch } from "@/components/home/HeroSearch";
 import { HeroWave } from "@/components/home/HeroWave";
+import { SectionTopWave } from "@/components/home/SectionTopWave";
 import { StoreExperience } from "@/components/home/StoreExperience";
 import { FeaturedCarousel } from "@/components/products/FeaturedCarousel";
 import { Eyebrow } from "@/components/ui/Eyebrow";
@@ -104,8 +105,10 @@ export default async function HomePage() {
         <HeroWave />
       </section>
 
-      <section className="bg-white py-20" id="categorias">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="relative overflow-hidden bg-white pb-20 pt-28" id="categorias">
+        {/* Onda espelhada (navy, apontando para baixo) encaixando na onda do hero */}
+        <SectionTopWave />
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
             <div className="max-w-2xl">
               <Eyebrow>Categorias</Eyebrow>
