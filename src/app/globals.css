@@ -90,7 +90,7 @@ section[id] {
     transform: translateY(0);
   }
   50% {
-    transform: translateY(-22px);
+    transform: translateY(-6px);
   }
 }
 
