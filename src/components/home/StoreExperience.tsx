@@ -1,27 +1,13 @@
 import { MapPin, MessageCircle, PackageCheck, Users } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { Eyebrow } from "@/components/ui/Eyebrow";
-
-/* eslint-disable @next/next/no-img-element */
+import { StoreExperienceMarquee } from "@/components/home/StoreExperienceMarquee";
 
 /**
  * Seção "Prontos para te atender": mostra a estrutura física e o atendimento
- * da loja por meio de um marquee (carrossel contínuo, só CSS) com fotos reais.
- *
- * Por que só CSS: a animação é decorativa e dispensa estado/JS. O loop é
- * perfeito porque a lista de fotos é renderizada duas vezes lado a lado e
- * desliza -50%; ao passar o mouse, pausa; com `prefers-reduced-motion`, fica
- * estática (regra global em globals.css) sem esconder conteúdo.
+ * da loja. O carrossel de fotos (StoreExperienceMarquee) é dirigido pelo scroll
+ * — a faixa desliza na horizontal acompanhando a rolagem do mouse.
  */
-
-const photos = [
-  { src: "/experiencia/loja-01.jpg", alt: "Corredor da Náutica Color com prateleiras de tintas, antifouling e abrasivos" },
-  { src: "/experiencia/loja-02.jpg", alt: "Balcão de atendimento da Náutica Color com selantes e acessórios náuticos" },
-  { src: "/experiencia/loja-03.jpg", alt: "Estoque variado de produtos náuticos exposto na loja Náutica Color" }
-];
-
-// Lista duplicada para o loop contínuo do marquee.
-const marquee = [...photos, ...photos];
 
 const reasons: { icon: LucideIcon; title: string; text: string }[] = [
   { icon: PackageCheck, title: "Estoque completo", text: "Tintas, antifouling, abrasivos, fiberglass e acabamentos na prateleira." },
@@ -61,32 +47,15 @@ export function StoreExperience({ supportUrl }: { supportUrl: string }) {
         </div>
       </div>
 
-      {/* Marquee de fotos da loja (full-bleed), com máscara de borda suave. */}
-      <div className="group relative mt-12 [mask-image:linear-gradient(to_right,transparent,black_6%,black_94%,transparent)]">
-        <div className="flex w-max animate-marquee gap-5 group-hover:[animation-play-state:paused]">
-          {marquee.map((photo, index) => (
-            <figure
-              key={index}
-              aria-hidden={index >= photos.length ? "true" : undefined}
-              className="relative aspect-[21/9] w-[280px] shrink-0 overflow-hidden rounded-lg shadow-soft ring-1 ring-navy/10 sm:w-[360px]"
-            >
-              <img
-                src={photo.src}
-                alt={index >= photos.length ? "" : photo.alt}
-                loading="lazy"
-                className="h-full w-full object-cover transition-transform duration-500 ease-nautica hover:scale-105"
-              />
-            </figure>
-          ))}
-        </div>
-      </div>
+      {/* Carrossel de fotos da loja dirigido pelo scroll (full-bleed). */}
+      <StoreExperienceMarquee />
 
       <div className="mx-auto mt-10 flex max-w-7xl justify-center px-4 sm:px-6 lg:px-8">
         <a
           href={supportUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-red px-6 py-2.5 text-sm font-semibold text-white hover:bg-red-bright"
+          className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-red px-5 text-sm font-semibold text-white transition hover:bg-red-bright"
         >
           <MessageCircle size={18} aria-hidden="true" /> Falar com a equipe
         </a>

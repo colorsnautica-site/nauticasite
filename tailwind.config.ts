@@ -45,17 +45,12 @@ const config: Config = {
         "wave-scroll": {
           from: { transform: "translateX(0)" },
           to: { transform: "translateX(-50%)" }
-        },
-        marquee: {
-          from: { transform: "translateX(0)" },
-          to: { transform: "translateX(-50%)" }
         }
       },
       animation: {
         "fade-up": "fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both",
         wave: "wave-scroll 16s linear infinite",
-        "wave-slow": "wave-scroll 24s linear infinite",
-        marquee: "marquee 45s linear infinite"
+        "wave-slow": "wave-scroll 24s linear infinite"
       }
     }
   },
