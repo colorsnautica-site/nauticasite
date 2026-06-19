@@ -84,6 +84,29 @@ section[id] {
   overflow: hidden;
 }
 
+/* Onda em camadas (parallax) do hero — adaptada do efeito "gentle wave".
+   Cada camada desliza na horizontal em velocidade/atraso diferentes. */
+@keyframes wave-move-forever {
+  0% {
+    transform: translate(-90px, 0);
+  }
+  100% {
+    transform: translate(85px, 0);
+  }
+}
+
+.hero-waves > use {
+  animation: wave-move-forever 8s -8s linear infinite;
+}
+.hero-waves > use:nth-child(2) {
+  animation-delay: -3s;
+  animation-duration: 8s;
+}
+.hero-waves > use:nth-child(3) {
+  animation-delay: -4s;
+  animation-duration: 10s;
+}
+
 .wave-panel::after {
   background: radial-gradient(circle at 15% 30%, rgba(255, 255, 255, 0.16), transparent 24%),
     linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent);

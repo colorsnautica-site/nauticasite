@@ -3,10 +3,14 @@
 import { useEffect, useRef } from "react";
 
 /**
- * Onda do hero. O deslize horizontal continua via CSS (`animate-wave`); o
- * movimento vertical (sobe e desce) é dirigido pela posição do scroll do
- * usuário — quanto mais ele rola, mais a onda balança suavemente. Respeita
- * `prefers-reduced-motion`: se ativo, a onda fica estática.
+ * Onda do hero em camadas (parallax). Três cópias da mesma curva deslizam na
+ * horizontal em velocidades diferentes (CSS `wave-move-forever`, definido em
+ * globals.css), criando profundidade. As cores seguem a paleta da Náutica:
+ * camadas de trás em azul-claro da marca (sky/mist) sobre o navy do hero e a
+ * camada da frente em branco, que funde com a seção branca abaixo.
+ *
+ * O movimento vertical (sobe/desce) acompanha o scroll do usuário e respeita
+ * `prefers-reduced-motion` (tratado globalmente em globals.css).
  */
 export function HeroWave() {
   const bobRef = useRef<HTMLDivElement>(null);
@@ -47,14 +51,21 @@ export function HeroWave() {
     >
       <div ref={bobRef} className="will-change-transform">
         <svg
-          viewBox="0 0 2880 120"
+          viewBox="0 24 150 28"
           preserveAspectRatio="none"
-          className="block h-16 w-[200%] animate-wave sm:h-20"
+          className="block h-16 w-full sm:h-20"
         >
-          <path
-            fill="#ffffff"
-            d="M0,50 C360,100 1080,0 1440,50 C1800,100 2520,0 2880,50 L2880,120 L0,120 Z"
-          />
+          <defs>
+            <path
+              id="gentle-wave"
+              d="M-160 44c30 0 58-18 88-18s58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"
+            />
+          </defs>
+          <g className="hero-waves">
+            <use href="#gentle-wave" x="80" y="0" fill="#E8F0FA" fillOpacity="0.2" />
+            <use href="#gentle-wave" x="40" y="3" fill="#D7E5F4" fillOpacity="0.5" />
+            <use href="#gentle-wave" x="40" y="6" fill="#ffffff" />
+          </g>
         </svg>
       </div>
       <div className="absolute inset-x-0 bottom-0 h-7 bg-white" />
