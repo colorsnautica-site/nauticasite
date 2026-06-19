@@ -1,8 +1,9 @@
 /**
  * Onda no topo da seção inferior: espelho vertical da onda do hero (mesma curva
  * `gentle-wave` e mesma animação `wave-move-forever`, por isso permanecem em
- * sincronia). Preenchida em navy e apontando para baixo, dá a sensação de que a
- * onda do hero "continua" e se completa ao entrar na seção branca de baixo.
+ * sincronia). Usa as mesmas cores e tamanho da onda do hero (sky/mist/branco),
+ * apenas viradas para baixo, dando a sensação de que a onda do hero "continua"
+ * e se completa ao entrar na seção de baixo.
  *
  * É puramente CSS/SVG (sem estado), então pode ser Server Component. O flip
  * vertical (`-scale-y-100`) coloca o cheio em cima e as cristas apontando para
@@ -26,9 +27,9 @@ export function SectionTopWave() {
           />
         </defs>
         <g className="hero-waves">
-          <use href="#gentle-wave-down" x="0" y="0" fill="#172C65" fillOpacity="0.2" />
-          <use href="#gentle-wave-down" x="45" y="3" fill="#172C65" fillOpacity="0.5" />
-          <use href="#gentle-wave-down" x="25" y="6" fill="#002659" />
+          <use href="#gentle-wave-down" x="0" y="0" fill="#E8F0FA" fillOpacity="0.2" />
+          <use href="#gentle-wave-down" x="45" y="3" fill="#D7E5F4" fillOpacity="0.5" />
+          <use href="#gentle-wave-down" x="25" y="6" fill="#ffffff" />
         </g>
       </svg>
     </div>
