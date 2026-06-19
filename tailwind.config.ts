@@ -45,12 +45,17 @@ const config: Config = {
         "wave-scroll": {
           from: { transform: "translateX(0)" },
           to: { transform: "translateX(-50%)" }
+        },
+        "wave-bob": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-12px)" }
         }
       },
       animation: {
         "fade-up": "fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both",
         wave: "wave-scroll 16s linear infinite",
-        "wave-slow": "wave-scroll 24s linear infinite"
+        "wave-slow": "wave-scroll 24s linear infinite",
+        "wave-bob": "wave-bob 5s ease-in-out infinite"
       }
     }
   },

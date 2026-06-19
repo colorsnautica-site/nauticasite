@@ -100,9 +100,12 @@ export default async function HomePage() {
 
         {/* Onda náutica viajando para a esquerda (loop tileável) */}
         <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 z-0 overflow-hidden">
-          <svg viewBox="0 0 2880 120" preserveAspectRatio="none" className="h-10 w-[200%] animate-wave sm:h-16">
-            <path fill="#ffffff" d="M0,50 C360,100 1080,0 1440,50 C1800,100 2520,0 2880,50 L2880,120 L0,120 Z" />
-          </svg>
+          <div className="animate-wave-bob">
+            <svg viewBox="0 0 2880 120" preserveAspectRatio="none" className="block h-16 w-[200%] animate-wave sm:h-24">
+              <path fill="#ffffff" d="M0,50 C360,100 1080,0 1440,50 C1800,100 2520,0 2880,50 L2880,120 L0,120 Z" />
+            </svg>
+          </div>
+          <div className="absolute inset-x-0 bottom-0 h-4 bg-white" />
         </div>
       </section>
 
