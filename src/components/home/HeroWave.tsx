@@ -49,7 +49,7 @@ export function HeroWave() {
         <svg
           viewBox="0 0 2880 120"
           preserveAspectRatio="none"
-          className="block h-24 w-[200%] animate-wave sm:h-32"
+          className="block h-16 w-[200%] animate-wave sm:h-20"
         >
           <path
             fill="#ffffff"
