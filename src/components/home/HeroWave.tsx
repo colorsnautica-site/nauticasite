@@ -48,31 +48,47 @@ export function HeroWave() {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none absolute inset-x-0 bottom-0 z-0 overflow-hidden"
+      className="pointer-events-none absolute inset-x-0 bottom-0 z-0"
     >
-      <div ref={bobRef} className="will-change-transform">
-        <svg
-          viewBox="0 4 120 48"
-          preserveAspectRatio="none"
-          className="block h-12 w-full sm:h-16"
-        >
-          <defs>
-            {/* Onda senoidal contínua: cristas (y=8) e cavas (y=40) alternadas
-                em torno da linha média (y=24) — cada onda emenda na próxima
-                pela curva descendente, sem trecho reto. Período = 120. */}
-            <path
-              id="gentle-wave"
-              d="M-240 24 c15 0 30 -16 60 -16 s30 32 60 32 s30 -32 60 -32 s30 32 60 32 s30 -32 60 -32 s30 32 60 32 s30 -32 60 -32 s30 32 60 32 v44 h-480 z"
-            />
-          </defs>
-          <g className="hero-waves">
-            <use href="#gentle-wave" x="0" y="0" fill="#E8F0FA" fillOpacity="0.2" />
-            <use href="#gentle-wave" x="45" y="3" fill="#D7E5F4" fillOpacity="0.5" />
-            <use href="#gentle-wave" x="25" y="6" fill="#ffffff" />
-          </g>
-        </svg>
+      {/* Base branca do "mar": cobre o pé do hero (do fim da seção até a linha
+          da onda) para que TODA a onda possa ser elevada (bottom-16) sem
+          revelar o azul do hero por baixo dela. Subir/baixar esse h-16 + o
+          bottom-16 da faixa abaixo (mantendo-os iguais) move toda a onda. */}
+      <div className="absolute inset-x-0 bottom-0 h-28 bg-white" />
+      {/* Faixa da onda, elevada para subir todas as ondas no hero. */}
+      <div className="absolute inset-x-0 bottom-28 overflow-hidden">
+        <div ref={bobRef} className="will-change-transform">
+          <svg
+            viewBox="0 0 120 48"
+            preserveAspectRatio="none"
+            className="block h-12 w-full sm:h-16"
+          >
+            <defs>
+              {/* Onda senoidal contínua: cristas e cavas alternadas em torno da
+                  linha média (y=19) — cada onda emenda na próxima pela curva
+                  descendente, sem trecho reto.
+
+                  Período = 160 (> largura do viewBox 120), então cabe ~0,75 de
+                  onda: uma única ondulação ampla e gentil cruzando a tela. Como
+                  o SVG usa preserveAspectRatio="none" e é esticado para a
+                  largura da tela, mantemos amplitude alta (cristas y=1 / cavas
+                  y=37) para a curvatura não achatar. A animação desliza
+                  exatamente -160px por ciclo (= período), então o loop é
+                  imperceptível. O caminho cobre de x=-120 a x=+360 (bem além
+                  das bordas) para nunca mostrar fresta da seção. */}
+              <path
+                id="gentle-wave"
+                d="M-120 19 c24 -18 56 -18 80 0 s56 18 80 0 c24 -18 56 -18 80 0 s56 18 80 0 c24 -18 56 -18 80 0 s56 18 80 0 v49 h-480 z"
+              />
+            </defs>
+            <g className="hero-waves">
+              <use href="#gentle-wave" x="0" y="0" fill="#E8F0FA" fillOpacity="0.2" />
+              <use href="#gentle-wave" x="45" y="3" fill="#D7E5F4" fillOpacity="0.5" />
+              <use href="#gentle-wave" x="25" y="6" fill="#ffffff" />
+            </g>
+          </svg>
+        </div>
       </div>
-      <div className="absolute inset-x-0 bottom-0 h-5 bg-white" />
     </div>
   );
 }

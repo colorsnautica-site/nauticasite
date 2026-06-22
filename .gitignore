@@ -8,3 +8,4 @@ dist/
 .next-*.png
 .vercel/
 tsconfig.tsbuildinfo
+.claude/

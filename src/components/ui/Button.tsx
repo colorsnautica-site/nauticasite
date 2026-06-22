@@ -10,7 +10,7 @@ const variants: Record<Variant, string> = {
 };
 
 const base =
-  "inline-flex h-11 items-center justify-center gap-2 rounded-full px-5 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2";
+  "inline-flex h-11 items-center justify-center gap-2 rounded-full px-5 text-xs font-semibold transition focus-visible:outline focus-visible:outline-2";
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: Variant;

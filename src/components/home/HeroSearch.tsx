@@ -41,7 +41,7 @@ export function HeroSearch({ categories }: { categories: Category[] }) {
         />
         <button
           type="submit"
-          className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-full bg-red px-5 text-sm font-semibold text-white transition hover:bg-red-bright"
+          className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-full bg-red px-5 text-xs font-semibold text-white transition hover:bg-red-bright"
         >
           Buscar <ArrowRight size={16} aria-hidden="true" />
         </button>
