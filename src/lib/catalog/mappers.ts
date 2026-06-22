@@ -45,7 +45,7 @@ export function mapProduct(row: RawRecord): Product {
   return {
     id: String(row.id),
     siteId: String(row.site_id),
-    brandId: String(row.brand_id),
+    brandId: row.brand_id ? String(row.brand_id) : "",
     categoryId: String(row.category_id),
     sku: String(row.sku),
     slug: String(row.slug),

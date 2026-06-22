@@ -30,7 +30,11 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   if (!product) notFound();
 
   const related = products
-    .filter((item) => item.id !== product.id && (item.categoryId === product.categoryId || item.brandId === product.brandId))
+    .filter(
+      (item) =>
+        item.id !== product.id &&
+        (item.categoryId === product.categoryId || (Boolean(product.brandId) && item.brandId === product.brandId))
+    )
     .slice(0, 4);
   const stockLabel = product.stockStatus === "available" ? "Disponível" : product.stockStatus === "unavailable" ? "Indisponível" : "Sob consulta";
   const benefits = [

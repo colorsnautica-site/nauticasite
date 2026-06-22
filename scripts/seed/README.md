@@ -7,19 +7,22 @@ você ainda não rodar este passo.
 
 ## Passo 1 — Criar as tabelas
 
-No painel do Supabase → **SQL Editor**, cole e rode o conteúdo de:
+No painel do Supabase → **SQL Editor**, cole e rode (nesta ordem) o conteúdo de:
 
 ```
 supabase/migrations/001_nautica_catalog.sql
+supabase/migrations/002_brand_optional.sql
 ```
 
 (ou, com a CLI do Supabase: `supabase db push`)
 
-Isso cria as tabelas `store_sites`, `store_brands`, `store_categories`,
+A `001` cria as tabelas `store_sites`, `store_brands`, `store_categories`,
 `store_products`, `store_settings` (PK `uuid`), os triggers de `updated_at` e
 libera **leitura pública** (RLS) apenas dos registros ativos/públicos. A própria
 migration já insere o site e um catálogo de exemplo (16 produtos) — o seed do
 Passo 2 substitui isso pelos 1.936 produtos reais (upsert por `sku`).
+A `002` torna `brand_id` opcional (produtos sem marca oficial ficam com
+`brand_id` nulo).
 
 ## Passo 2 — Popular os dados
 

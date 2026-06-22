@@ -71,15 +71,15 @@ async function main() {
   const brandId = new Map(brandRows.map((r) => [r.slug, r.id]));
   const categoryId = new Map(catRows.map((r) => [r.slug, r.id]));
 
-  // 4) Produtos (upsert por (site_id, sku))
+  // 4) Produtos (upsert por (site_id, sku)). brand_slug pode ser null => sem marca.
   const productRows = seed.products.map(({ brand_slug, category_slug, ...rest }) => ({
     ...rest,
     site_id: siteId,
-    brand_id: brandId.get(brand_slug),
+    brand_id: brand_slug ? brandId.get(brand_slug) ?? null : null,
     category_id: categoryId.get(category_slug)
   }));
-  const missing = productRows.filter((r) => !r.brand_id || !r.category_id);
-  if (missing.length) die("produtos", new Error(`${missing.length} produto(s) sem marca/categoria resolvida`));
+  const missingCat = productRows.filter((r) => !r.category_id);
+  if (missingCat.length) die("produtos", new Error(`${missingCat.length} produto(s) sem categoria resolvida`));
   await upsertChunked("store_products", productRows, "site_id,sku");
 
   // 4b) Remove produtos do site que não estão no seed (ex.: os de exemplo da migration).
