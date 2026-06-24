@@ -9,10 +9,11 @@ import type { LucideIcon } from "lucide-react";
 import { Eyebrow } from "@/components/Eyebrow";
 
 /**
- * Seção "Prontos para te atender": texto + motivos + CTA de um lado e, do outro,
- * a pilha de fotos da loja dirigida pelo scroll. A seção inteira é a "trilha" de
+ * Seção "Prontos para te atender": texto + motivos + CTA acima e, abaixo, a
+ * fileira de fotos da loja dirigida pelo scroll. A seção inteira é a "trilha" de
  * scroll: enquanto ela atravessa a viewport, o conteúdo fica fixo (sticky) e as
- * fotos entram na diagonal e se empilham (a última, a fachada, fica na frente).
+ * fotos vão APARECENDO e se alocando da esquerda para a direita, uma por uma,
+ * formando uma fileira horizontal de faixas (a última é a fachada, à direita).
  * Com `prefers-reduced-motion` tudo vira um layout estático.
  */
 
@@ -39,32 +40,32 @@ const reasons: { icon: LucideIcon; title: string; text: string }[] = [
   { icon: MapPin, title: "Pertinho da sua embarcação", text: "Atendimento presencial na Marina Verolme, em Angra dos Reis." }
 ];
 
-function StackCard({ photo, index, progress }: { photo: Photo; index: number; progress: MotionValue<number> }) {
-  // Empilhamento: cada foto entra na diagonal (canto inferior direito → repouso)
-  // no seu trecho do scroll e FICA parada; a próxima entra por cima (z-index por
-  // índice), terminando com a fachada na frente. A montagem acaba em FILL_END e
-  // o resto do scroll é pausa com a pilha completa. Janelas dentro de [0,1].
-  const FILL_END = 0.8;
+function RowCard({ photo, index, progress }: { photo: Photo; index: number; progress: MotionValue<number> }) {
+  // Fileira: cada foto ocupa um slot fixo (flex-1) e DESLIZA entrando pela
+  // direita no seu trecho do scroll, viajando até parar no seu lugar — fade +
+  // escala — de modo que a fileira se preenche da esquerda (foto 1) para a direita
+  // (foto 9 = fachada). Cada foto tem zIndex pelo índice, então passa por cima da
+  // anterior ao chegar. A montagem acaba em FILL_END e o resto do scroll é pausa
+  // com a fileira completa. Janelas dentro de [0,1].
+  const FILL_END = 0.85;
   const seg = FILL_END / total;
   const start = index * seg;
   const end = (index + 1) * seg;
-  const fade = seg * 0.5;
+  const appear = seg * 0.6;
 
-  const x = useTransform(progress, [start, end], ["90%", "0%"]);
-  const y = useTransform(progress, [start, end], ["90%", "0%"]);
-  const scale = useTransform(progress, [start, end], [1.06, 1]);
-  const rotate = useTransform(progress, [start, end], [6, 0]);
-  const opacity = useTransform(progress, [start, start + fade], [0, 1]);
+  const x = useTransform(progress, [start, end], ["60%", "0%"]);
+  const scale = useTransform(progress, [start, end], [0.96, 1]);
+  const opacity = useTransform(progress, [start, start + appear], [0, 1]);
 
   return (
     <motion.figure
       initial={false}
-      style={{ x, y, scale, rotate, opacity, zIndex: index }}
-      className="absolute inset-0 overflow-hidden rounded-2xl ring-1 ring-navy/10"
+      style={{ x, scale, opacity, zIndex: index }}
+      className="relative h-full min-w-0 flex-1 overflow-hidden rounded-lg shadow-sm ring-1 ring-navy/10"
     >
       <img src={photo.src} alt={photo.alt} loading={index < 2 ? "eager" : "lazy"} className="h-full w-full object-cover" />
-      <span className="absolute left-4 top-4 rounded-full bg-navy px-3 py-1 font-heading text-xs font-bold tabular-nums tracking-wide text-white">
-        {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
+      <span className="absolute left-1.5 top-1.5 rounded-full bg-navy px-1.5 py-0.5 font-heading text-[9px] font-bold tabular-nums tracking-wide text-white">
+        {String(index + 1).padStart(2, "0")}
       </span>
     </motion.figure>
   );
@@ -151,15 +152,15 @@ export function StoreExperience({ supportUrl }: { supportUrl: string }) {
           abaixo rola e PERMANECE fixo enquanto a próxima seção sobe por cima
           (as duas estão no mesmo container relativo em page.tsx). */}
       <section id="atendimento" className="sticky top-0 flex h-screen items-center overflow-hidden bg-white py-12">
-        <div className="mx-auto flex w-full max-w-3xl flex-col items-center gap-8 px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto flex w-full max-w-6xl flex-col items-center gap-7 px-4 sm:px-6 lg:px-8">
           <Intro />
 
-          {/* Pilha de fotos dirigida pelo scroll, abaixo do texto. Sombra só
-              aqui no container (uma só), pra as 9 fotos empilhadas não somarem
-              sombras e criarem um halo embaçado. */}
-          <div className="relative aspect-[3/2] w-full max-w-xl rounded-2xl shadow-soft">
+          {/* Fileira de fotos dirigida pelo scroll, abaixo do texto. Cada foto é
+              uma faixa de largura igual (flex-1) que vai aparecendo da esquerda
+              para a direita. Altura contida pra fileira caber na tela. */}
+          <div className="flex h-[30vh] w-full gap-1.5 sm:h-[34vh] sm:gap-2">
             {photos.map((photo, index) => (
-              <StackCard key={photo.src} photo={photo} index={index} progress={progress} />
+              <RowCard key={photo.src} photo={photo} index={index} progress={progress} />
             ))}
           </div>
           <SupportButton supportUrl={supportUrl} />
