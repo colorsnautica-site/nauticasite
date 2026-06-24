@@ -124,36 +124,39 @@ export default function LandingPage() {
         </div>
 
         <section id="contato" className="bg-white py-20">
-          <div className="mx-auto max-w-xl px-4 sm:px-6 lg:px-8">
-            <div className="rounded-lg bg-white p-8 text-center shadow-soft">
-              <MapPin className="mx-auto mb-5 text-red" size={34} aria-hidden="true" />
-              <div className="flex justify-center">
-                <Eyebrow>Contato</Eyebrow>
-              </div>
-              <h2 className="mt-3 font-heading text-3xl font-extrabold leading-tight text-navy sm:text-4xl">Atendimento na Marina Verolme.</h2>
-              <p className="mt-4 text-sm leading-6 text-ink/70">{store.location}</p>
-              <p className="mt-2 text-sm leading-6 text-ink/70">
+          <div className="mx-auto max-w-5xl px-4 text-center sm:px-6 lg:px-8">
+            <MapPin className="mx-auto mb-5 text-red" size={34} aria-hidden="true" />
+            <div className="flex justify-center">
+              <Eyebrow>Contato</Eyebrow>
+            </div>
+            <h2 className="mt-3 font-heading text-3xl font-extrabold leading-tight text-navy sm:text-4xl">Atendimento na Marina Verolme.</h2>
+
+            {/* Restante do texto distribuído numa linha pela página, sem caixa. */}
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-sm leading-6 text-ink/70">
+              <span>{store.location}</span>
+              <span>
                 Telefone:{" "}
                 <a href={`tel:+55${store.phone.replace(/\D/g, "")}`} className="font-medium text-navy underline-offset-2 hover:text-red hover:underline">
                   {store.phone}
                 </a>
-              </p>
-              <p className="mt-2 text-sm leading-6 text-ink/70">
+              </span>
+              <span>
                 WhatsApp:{" "}
                 <a href={supportUrl} target="_blank" rel="noopener noreferrer" className="font-medium text-navy underline-offset-2 hover:text-red hover:underline">
                   {store.whatsappVisible}
                 </a>
-              </p>
-              <p className="mt-2 text-sm leading-6 text-ink/70">
+              </span>
+              <span>
                 WhatsApp:{" "}
                 <a href={whatsappUrl(buildSupportMessage(), "5524993037332")} target="_blank" rel="noopener noreferrer" className="font-medium text-navy underline-offset-2 hover:text-red hover:underline">
                   {store.whatsappVisible2}
                 </a>
-              </p>
-              <a href={supportUrl} target="_blank" rel="noopener noreferrer" className="mt-6 inline-flex h-11 items-center justify-center gap-2 rounded-full bg-red px-5 text-sm font-semibold text-white transition hover:bg-red-bright">
-                <WhatsappIcon className="h-[18px] w-[18px]" /> Chamar no WhatsApp
-              </a>
+              </span>
             </div>
+
+            <a href={supportUrl} target="_blank" rel="noopener noreferrer" className="mt-7 inline-flex h-11 items-center justify-center gap-2 rounded-full bg-red px-5 text-sm font-semibold text-white transition hover:bg-red-bright">
+              <WhatsappIcon className="h-[18px] w-[18px]" /> Chamar no WhatsApp
+            </a>
           </div>
         </section>
 
