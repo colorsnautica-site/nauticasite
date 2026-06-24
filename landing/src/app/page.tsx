@@ -5,6 +5,7 @@ import { StoreExperience } from "@/components/StoreExperience";
 import { ProductShowcase } from "@/components/ProductShowcase";
 import { Eyebrow } from "@/components/Eyebrow";
 import { Reveal } from "@/components/Reveal";
+import { ScrollReveal } from "@/components/ScrollReveal";
 import { buildSupportMessage, resolveWhatsappNumber, whatsappUrl } from "@/lib/whatsapp";
 import { partnerBrands, store } from "@/data/showcase";
 
@@ -81,17 +82,20 @@ export default function LandingPage() {
 
         <section id="produtos" className="scroll-mt-20 bg-white pb-20 pt-28">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="max-w-2xl">
+            <ScrollReveal className="mx-auto max-w-2xl text-center">
               <Eyebrow>Produtos em destaque</Eyebrow>
               <h2 className="mt-3 font-heading text-3xl font-extrabold leading-tight text-navy sm:text-4xl">
-                Escolha o produto e fale com o atendimento.
+                Encontre o produto certo para a sua embarcação.
               </h2>
               <p className="mt-4 text-ink/70">
-                Tintas, antifouling, abrasivos, selantes e acabamentos: a Náutica Color tem uma linha completa para atender
-                sua embarcação. Nossa equipe ajuda você a encontrar tudo o que precisa para cada etapa do serviço.
+                Conheça alguns dos produtos disponíveis na Náutica Color e fale diretamente com nossa equipe pelo WhatsApp.
+                Tire dúvidas, confirme valores e disponibilidade e receba ajuda para escolher a melhor solução para cada
+                etapa do serviço.
               </p>
-            </div>
-            <ProductShowcase />
+            </ScrollReveal>
+            <ScrollReveal delay={180}>
+              <ProductShowcase />
+            </ScrollReveal>
           </div>
         </section>
 

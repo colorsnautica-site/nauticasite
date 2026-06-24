@@ -21,7 +21,8 @@ export function ProductShowcase() {
   return (
     <div className="mt-10">
       <p className="mx-auto mb-5 max-w-xl text-center text-sm font-medium text-navy/70">
-        Uma linha completa para cuidar da sua embarcação, da preparação ao acabamento.
+        Da preparação ao acabamento, você encontra produtos profissionais e atendimento especializado para cuidar da sua
+        embarcação.
       </p>
 
       <div className="relative mx-auto max-w-[340px] px-1" aria-label="Produtos disponíveis na Náutica Color">
