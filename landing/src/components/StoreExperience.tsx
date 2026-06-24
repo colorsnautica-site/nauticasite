@@ -145,12 +145,20 @@ export function StoreExperience({ supportUrl }: { supportUrl: string }) {
   if (reduce || !isDesktop) {
     return (
       <section id="atendimento" className="bg-white py-20">
-        <div className="mx-auto flex max-w-5xl flex-col items-center gap-10 px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-5xl flex-col items-center gap-7 px-4 sm:px-6 lg:px-8">
           <Intro />
-          <div className="grid w-full grid-cols-2 gap-3 sm:grid-cols-3">
-            {photos.map((photo) => (
-              <figure key={photo.src} className="aspect-[3/2] overflow-hidden rounded-xl shadow-soft ring-1 ring-navy/10">
+          {/* Fileira FIXA (estado final da animação do desktop), sem scroll. O
+              toque/hover numa faixa a expande (acordeão) pra abrir a foto. */}
+          <div className="flex h-[34vh] w-full gap-1.5">
+            {photos.map((photo, index) => (
+              <figure
+                key={photo.src}
+                className="group relative h-full min-w-0 flex-1 cursor-pointer overflow-hidden rounded-lg shadow-sm ring-1 ring-navy/10 transition-[flex-grow] duration-500 ease-nautica hover:flex-[8] hover:shadow-soft hover:ring-navy/25"
+              >
                 <img src={photo.src} alt={photo.alt} loading="lazy" className="h-full w-full object-cover" />
+                <span className="absolute left-1.5 top-1.5 rounded-full bg-navy px-1.5 py-0.5 font-heading text-[9px] font-bold tabular-nums tracking-wide text-white">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
               </figure>
             ))}
           </div>
