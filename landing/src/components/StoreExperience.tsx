@@ -70,16 +70,16 @@ function StackCard({ photo, index, progress }: { photo: Photo; index: number; pr
   );
 }
 
-function Intro({ supportUrl }: { supportUrl: string }) {
+function Intro() {
   return (
     <div className="mx-auto max-w-2xl text-center">
       <div className="flex justify-center">
-        <Eyebrow>Atendimento</Eyebrow>
+        <Eyebrow className="text-[10px]">Atendimento</Eyebrow>
       </div>
-      <h2 className="mt-3 font-heading text-3xl font-extrabold leading-tight text-navy sm:text-4xl">
+      <h2 className="mt-3 font-heading text-2xl font-extrabold leading-tight text-navy sm:text-3xl">
         Tudo para sua embarcação, em um só lugar.
       </h2>
-      <p className="mt-4 text-ink/70">
+      <p className="mt-4 text-sm leading-6 text-ink/70">
         Da preparação ao acabamento, do casco ao convés: estoque completo, marcas profissionais e uma equipe que conhece
         cada produto. Passe na Marina Verolme ou chame pelo WhatsApp: a gente encontra a solução certa para a sua
         embarcação.
@@ -99,15 +99,20 @@ function Intro({ supportUrl }: { supportUrl: string }) {
         ))}
       </div>
 
-      <a
-        href={supportUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="mt-7 inline-flex h-11 items-center justify-center gap-2 rounded-full bg-red px-5 text-sm font-semibold text-white transition hover:bg-red-bright"
-      >
-        <MessageCircle size={18} aria-hidden="true" /> Falar com a equipe
-      </a>
     </div>
+  );
+}
+
+function SupportButton({ supportUrl }: { supportUrl: string }) {
+  return (
+    <a
+      href={supportUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-red px-5 text-sm font-semibold text-white transition hover:bg-red-bright"
+    >
+      <MessageCircle size={18} aria-hidden="true" /> Falar com a equipe
+    </a>
   );
 }
 
@@ -126,7 +131,7 @@ export function StoreExperience({ supportUrl }: { supportUrl: string }) {
     return (
       <section id="atendimento" className="bg-white py-20">
         <div className="mx-auto flex max-w-5xl flex-col items-center gap-10 px-4 sm:px-6 lg:px-8">
-          <Intro supportUrl={supportUrl} />
+          <Intro />
           <div className="grid w-full grid-cols-2 gap-3 sm:grid-cols-3">
             {photos.map((photo) => (
               <figure key={photo.src} className="aspect-[3/2] overflow-hidden rounded-xl shadow-soft ring-1 ring-navy/10">
@@ -134,6 +139,7 @@ export function StoreExperience({ supportUrl }: { supportUrl: string }) {
               </figure>
             ))}
           </div>
+          <SupportButton supportUrl={supportUrl} />
         </div>
       </section>
     );
@@ -146,7 +152,7 @@ export function StoreExperience({ supportUrl }: { supportUrl: string }) {
           (as duas estão no mesmo container relativo em page.tsx). */}
       <section id="atendimento" className="sticky top-0 flex h-screen items-center overflow-hidden bg-white py-12">
         <div className="mx-auto flex w-full max-w-3xl flex-col items-center gap-8 px-4 sm:px-6 lg:px-8">
-          <Intro supportUrl={supportUrl} />
+          <Intro />
 
           {/* Pilha de fotos dirigida pelo scroll, abaixo do texto. Sombra só
               aqui no container (uma só), pra as 9 fotos empilhadas não somarem
@@ -156,6 +162,7 @@ export function StoreExperience({ supportUrl }: { supportUrl: string }) {
               <StackCard key={photo.src} photo={photo} index={index} progress={progress} />
             ))}
           </div>
+          <SupportButton supportUrl={supportUrl} />
         </div>
       </section>
 
