@@ -50,8 +50,8 @@ export function HeroWave() {
         className="absolute inset-x-0 bottom-0 will-change-transform"
       >
         {/* Base branca do "mar" cobrindo o navy abaixo da faixa da onda. */}
-        <div className="absolute inset-x-0 bottom-[-200px] h-[306px] bg-white" />
-        <div className="absolute inset-x-0 bottom-[104px] overflow-hidden">
+        <div className="absolute inset-x-0 bottom-[-220px] h-[306px] bg-white" />
+        <div className="absolute inset-x-0 bottom-[84px] overflow-hidden">
           <svg
             viewBox="0 0 120 48"
             preserveAspectRatio="none"

@@ -76,7 +76,7 @@ export default function LandingPage() {
           <HeroWave />
         </section>
 
-        <section id="produtos" className="scroll-mt-20 bg-white pb-20 pt-12">
+        <section id="produtos" className="scroll-mt-20 bg-white pb-20 pt-8">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <ScrollReveal className="mx-auto max-w-2xl text-center">
               <Eyebrow>Produtos em destaque</Eyebrow>
