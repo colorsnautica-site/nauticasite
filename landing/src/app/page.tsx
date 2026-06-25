@@ -149,7 +149,9 @@ export default function LandingPage() {
         </footer>
 
         <a href={supportUrl} target="_blank" rel="noopener noreferrer" aria-label="Falar com a Náutica Color pelo WhatsApp" className="fixed bottom-4 right-4 z-30 grid h-14 w-14 place-items-center text-red drop-shadow-lg transition hover:scale-110 hover:text-red-bright sm:bottom-6">
-          <WhatsappIcon className="h-14 w-14" />
+          {/* Fundo branco preenchendo o interior do ícone (que é vazado). */}
+          <span aria-hidden="true" className="col-start-1 row-start-1 h-11 w-11 rounded-full bg-white" />
+          <WhatsappIcon className="col-start-1 row-start-1 h-14 w-14" />
         </a>
       </main>
     </>
