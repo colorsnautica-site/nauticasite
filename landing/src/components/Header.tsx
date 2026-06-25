@@ -52,32 +52,24 @@ export function Header({ supportUrl }: { supportUrl: string }) {
   }, []);
 
   const fillPx = progress * headerWidth;
-  const WAVE_W = 44; // largura do SVG da onda (px)
+  const WAVE_W = 64; // largura do SVG da onda (px)
 
   return (
     <header
       ref={headerRef}
       className="sticky top-0 z-40 overflow-hidden bg-white/95 backdrop-blur"
     >
-      {/* Camada base (sobre branco): logo escuro + botão. */}
-      <HeaderInner supportUrl={supportUrl} variant="dark" />
+      {/* Conteúdo: logo + botão. O preenchimento azul sobe por cima e os
+          encobre conforme o scroll avança. */}
+      <HeaderInner supportUrl={supportUrl} />
 
-      {/* Camada de preenchimento azul, recortada pela largura do scroll. */}
+      {/* Faixa azul que preenche da esquerda para a direita, cobrindo o
+          conteúdo. Recortada pela largura do scroll. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-y-0 left-0 overflow-hidden bg-navy"
+        className="pointer-events-none absolute inset-y-0 left-0 bg-navy"
         style={{ width: `${fillPx}px` }}
-      >
-        {/* Cópia clara do conteúdo, ancorada à largura total do header para
-            alinhar pixel a pixel com a camada base; o recorte acima revela
-            apenas a parte que está sobre o azul. */}
-        <div
-          className="absolute inset-y-0 left-0"
-          style={{ width: headerWidth ? `${headerWidth}px` : "100%" }}
-        >
-          <HeaderInner supportUrl={supportUrl} variant="light" />
-        </div>
-      </div>
+      />
 
       {/* Onda vertical na borda do preenchimento (visível só durante o scroll). */}
       <ScrollWave leftPx={fillPx} width={WAVE_W} visible={progress > 0.001} />
@@ -85,39 +77,21 @@ export function Header({ supportUrl }: { supportUrl: string }) {
   );
 }
 
-function HeaderInner({
-  supportUrl,
-  variant,
-}: {
-  supportUrl: string;
-  variant: "dark" | "light";
-}) {
-  const isLight = variant === "light";
-  const logo = isLight
-    ? "/brand/nautica-color-logo-light.png"
-    : "/brand/nautica-color-logo.png";
-  // A cópia clara é puramente visual: não recebe foco nem cliques (a camada
-  // base, por baixo, é quem responde à interação).
-  const interactive = isLight ? "pointer-events-none" : "pointer-events-auto";
-
+function HeaderInner({ supportUrl }: { supportUrl: string }) {
   return (
-    <div className="pointer-events-none mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+    <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
       <a
         href="#topo"
-        className={`${interactive} flex items-center gap-3`}
+        className="flex items-center gap-3"
         aria-label="Náutica Color"
-        tabIndex={isLight ? -1 : undefined}
-        aria-hidden={isLight ? true : undefined}
       >
-        <img src={logo} alt="Náutica Color" className="h-10 w-auto" />
+        <img src="/brand/nautica-color-logo.png" alt="Náutica Color" className="h-10 w-auto" />
       </a>
       <a
         href={supportUrl}
         target="_blank"
         rel="noopener noreferrer"
-        tabIndex={isLight ? -1 : undefined}
-        aria-hidden={isLight ? true : undefined}
-        className={`${interactive} inline-flex h-10 items-center justify-center gap-2 rounded-full bg-red px-4 text-sm font-semibold text-white transition hover:bg-red-bright sm:px-5`}
+        className="inline-flex h-10 items-center justify-center gap-2 rounded-full bg-red px-4 text-sm font-semibold text-white transition hover:bg-red-bright sm:px-5"
       >
         <WhatsappIcon className="h-4 w-4" />{" "}
         <span className="hidden sm:inline">Falar no WhatsApp</span>
@@ -128,10 +102,13 @@ function HeaderInner({
 }
 
 /**
- * Onda vertical desenhada na borda do preenchimento azul. A metade esquerda do
- * SVG é navy sólido (cobre a emenda reta da faixa) e a borda direita ondula,
- * com as cristas avançando sobre o branco. A onda desliza na vertical
- * (`header-wave-flow`, em globals.css), ecoando o movimento da onda do hero.
+ * Onda vertical desenhada na borda do preenchimento azul, no mesmo espírito da
+ * onda do hero: três camadas (parallax) da mesma curva, com opacidades e
+ * velocidades diferentes, deslizando na vertical (`header-wave-flow`, em
+ * globals.css). A camada da frente é navy opaco e define a borda do
+ * preenchimento; as de trás são navy translúcido e avançam um pouco mais sobre
+ * o branco, formando a "espuma". O comprimento de onda é largo, gerando uma
+ * ondulação suave e ampla.
  */
 function ScrollWave({
   leftPx,
@@ -143,16 +120,21 @@ function ScrollWave({
   visible: boolean;
 }) {
   // viewBox em unidades: largura `width`, altura 64 (= h-16). A fronteira do
-  // preenchimento fica no x central; cristas avançam para a direita.
+  // preenchimento fica no x central; as cristas avançam para a direita.
   const H = 64;
-  const L = 22; // comprimento de onda (em unidades de y)
+  const L = 88; // comprimento de onda bem largo (em unidades de y)
+  const AMP = 14; // avanço da crista da camada principal sobre a borda
   const BOUNDARY = width / 2; // x da borda reta da faixa
-  const TROUGH = BOUNDARY; // vale da onda encosta na borda
-  const CREST = BOUNDARY + 12; // crista avança 12px sobre o branco
 
-  // Constrói uma onda suave (curvas S) que ladrilha de y=-L até y=H+L, para
-  // que a animação translateY(-L) seja perfeitamente contínua.
-  const d = buildWavePath({ top: -L, bottom: H + L, L, trough: TROUGH, crest: CREST });
+  // Curva única, ladrilhada bem além do viewBox (-2L..H+2L) para que o
+  // translateY contínuo da animação nunca mostre emenda.
+  const d = buildWavePath({
+    top: -2 * L,
+    bottom: H + 2 * L,
+    L,
+    trough: BOUNDARY,
+    crest: BOUNDARY + AMP,
+  });
 
   return (
     <div
@@ -169,8 +151,15 @@ function ScrollWave({
         preserveAspectRatio="none"
         className="h-full w-full"
       >
+        <defs>
+          <path id="header-vwave" d={d} />
+        </defs>
+        {/* Trás → frente: espuma translúcida adiantada e, por cima, a camada
+            opaca que casa com a faixa azul (vale na borda exata). */}
         <g className="header-wave">
-          <path d={d} fill="#002659" />
+          <use href="#header-vwave" x={12} y={26} fill="#002659" fillOpacity={0.22} />
+          <use href="#header-vwave" x={6} y={53} fill="#002659" fillOpacity={0.5} />
+          <use href="#header-vwave" x={0} y={0} fill="#002659" />
         </g>
       </svg>
     </div>

@@ -95,18 +95,36 @@ section[id] {
   animation-duration: 10s;
 }
 
-/* Onda vertical da borda do preenchimento do header. Desliza na vertical um
-   comprimento de onda (22 unidades do viewBox) de forma contínua, ecoando o
-   movimento da onda do hero. */
+/* Onda vertical da borda do preenchimento do header — em camadas (parallax),
+   no mesmo espírito da onda do hero. Cada camada desliza na vertical um
+   comprimento de onda (88 unidades do viewBox), com um leve bob horizontal, em
+   velocidades diferentes. */
 @keyframes header-wave-flow {
-  from {
-    transform: translateY(0);
+  0% {
+    transform: translate(0, 0);
   }
-  to {
-    transform: translateY(-22px);
+  25% {
+    transform: translate(1px, -22px);
+  }
+  50% {
+    transform: translate(0, -44px);
+  }
+  75% {
+    transform: translate(-1px, -66px);
+  }
+  100% {
+    transform: translate(0, -88px);
   }
 }
 
-.header-wave {
-  animation: header-wave-flow 2.6s linear infinite;
+.header-wave > use {
+  animation: header-wave-flow 8s -8s linear infinite;
+}
+.header-wave > use:nth-child(2) {
+  animation-delay: -3s;
+  animation-duration: 9s;
+}
+.header-wave > use:nth-child(3) {
+  animation-delay: -4s;
+  animation-duration: 11s;
 }
