@@ -24,7 +24,7 @@ export function Header({ phone }: { phone?: string }) {
   return (
     <>
       <div className="bg-navy text-white">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2 text-xs sm:px-6 sm:text-sm lg:px-8">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-1 text-xs sm:px-6 lg:px-8">
           <span>Marina Verolme, Angra dos Reis - RJ</span>
           <span className="hidden items-center gap-2 sm:flex">
             <Phone size={14} aria-hidden="true" /> {phone || "(24) 2404-4606"}
@@ -32,13 +32,13 @@ export function Header({ phone }: { phone?: string }) {
         </div>
       </div>
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur">
-        <div className="relative mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:h-24 lg:px-8">
+        <div className="relative mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <Link href="/" className="flex items-center gap-3" aria-label="Náutica Color">
-            <img src="/brand/nautica-color-logo.png" alt="Náutica Color" className="h-12 w-auto sm:h-14 lg:h-16" />
+            <img src="/brand/nautica-color-logo.png" alt="Náutica Color" className="h-10 w-auto" />
           </Link>
-          <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-6 lg:flex" aria-label="Menu principal">
+          <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-5 lg:flex" aria-label="Menu principal">
             {nav.map((item) => (
-              <Link key={item.href} href={item.href} className="whitespace-nowrap text-sm font-semibold text-navy hover:text-red">
+              <Link key={item.href} href={item.href} className="whitespace-nowrap text-xs font-semibold text-navy hover:text-red">
                 {item.label}
               </Link>
             ))}
@@ -46,7 +46,7 @@ export function Header({ phone }: { phone?: string }) {
           <div className="flex items-center gap-2">
             <Link
               href="/#atendimento"
-              className="hidden h-12 items-center justify-center gap-2 rounded-full bg-off-white px-6 text-sm font-semibold text-navy transition hover:bg-navy hover:text-white md:inline-flex"
+              className="hidden h-11 items-center justify-center gap-2 rounded-full bg-off-white px-5 text-sm font-semibold text-navy transition hover:bg-navy hover:text-white md:inline-flex"
             >
               <MessageCircle size={16} aria-hidden="true" />
               Orçamento
@@ -54,7 +54,7 @@ export function Header({ phone }: { phone?: string }) {
             <button
               type="button"
               onClick={openCart}
-              className="relative grid h-12 w-12 place-items-center rounded-full bg-navy text-white hover:bg-navy-light"
+              className="relative grid h-11 w-11 place-items-center rounded-full bg-navy text-white hover:bg-navy-light"
               aria-label="Abrir carrinho de compras"
             >
               <ShoppingBasket size={19} aria-hidden="true" />
@@ -72,7 +72,7 @@ export function Header({ phone }: { phone?: string }) {
             </button>
             <button
               type="button"
-              className="grid h-12 w-12 place-items-center rounded-full text-navy hover:bg-off-white md:hidden"
+              className="grid h-11 w-11 place-items-center rounded-full text-navy hover:bg-off-white md:hidden"
               onClick={() => setOpen((value) => !value)}
               aria-label="Abrir menu"
               aria-expanded={open}
