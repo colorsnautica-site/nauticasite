@@ -63,9 +63,9 @@ select {
   animation: page-enter 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* Offset de ancoras abaixo do header sticky (~80px) ao navegar para #id */
+/* Offset de ancoras abaixo do header sticky ampliado ao navegar para #id */
 section[id] {
-  scroll-margin-top: 6rem;
+  scroll-margin-top: 7rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
