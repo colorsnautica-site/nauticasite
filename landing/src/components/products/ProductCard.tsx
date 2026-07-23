@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { formatPriceLabel, isOnRequestPrice } from "@/lib/currency";
-import type { ShowcaseProduct } from "@/data/showcase";
+import type { Product } from "@/data/catalog";
 import { WhatsappIcon } from "@/components/WhatsappIcon";
 
 /**
@@ -12,17 +12,15 @@ export function ProductCard({
   product,
   whatsappUrl
 }: {
-  product: ShowcaseProduct;
+  product: Product;
   whatsappUrl: string;
 }) {
-  const stockLabel =
-    product.stockStatus === "available" ? "Disponível" : product.stockStatus === "unavailable" ? "Indisponível" : "Sob consulta";
-  const stockBadge = product.stockStatus === "unavailable" ? "bg-red text-white" : "bg-white text-navy shadow-sm";
+  const stockLabel = product.stockStatus === "available" ? "Disponível" : "Sob consulta";
 
   return (
     <article className="group flex h-full flex-col rounded-[28px] border border-navy/10 bg-white p-3 shadow-sm transition hover:-translate-y-1 hover:border-red/20 hover:shadow-soft">
       <div className="relative aspect-[3/2] overflow-hidden rounded-3xl bg-sky transition group-hover:bg-mist">
-        <span className={`absolute right-3 top-3 z-10 rounded-full px-2.5 py-1 text-[11px] font-semibold ${stockBadge}`}>
+        <span className="absolute right-3 top-3 z-10 rounded-full bg-white px-2.5 py-1 text-[11px] font-semibold text-navy shadow-sm">
           {stockLabel}
         </span>
         <img
@@ -34,14 +32,12 @@ export function ProductCard({
       </div>
       <div className="mt-3 flex flex-1 flex-col px-2">
         <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-          <span className="text-xs font-bold uppercase tracking-[0.18em] text-red">{product.brandName}</span>
-          {product.categoryName ? (
-            <span className="text-xs font-semibold text-ink/45">· {product.categoryName}</span>
+          {product.brandName ? (
+            <span className="text-xs font-bold uppercase tracking-[0.18em] text-red">{product.brandName}</span>
           ) : null}
         </div>
         <h3 className="mt-1.5 line-clamp-2 font-heading text-base font-bold leading-tight text-navy">{product.name}</h3>
-        <p className="mt-2 line-clamp-2 flex-1 text-sm leading-5 text-ink/70">{product.shortDescription}</p>
-        <div className="mt-3 flex items-end justify-between gap-2 border-t border-navy/10 pt-3">
+        <div className="mt-3 flex flex-1 items-end justify-between gap-2 border-t border-navy/10 pt-3">
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-wide text-ink/45">
               {isOnRequestPrice(product.priceCents) ? "Preço" : "Preço de referência"}

@@ -1,5 +1,5 @@
 import { formatPriceLabel } from "@/lib/currency";
-import type { ShowcaseProduct } from "@/data/showcase";
+import type { Product } from "@/data/catalog";
 
 // Número padrão; pode ser sobrescrito pela env NEXT_PUBLIC_WHATSAPP_NUMBER no
 // projeto Vercel da landing.
@@ -15,7 +15,7 @@ export function buildSupportMessage() {
 
 // Mensagem do botão "Falar no WhatsApp" de um produto da vitrine — já chega no
 // atendimento com nome, código e preço de referência preenchidos.
-export function buildProductMessage(product: ShowcaseProduct) {
+export function buildProductMessage(product: Product) {
   const brand = product.brandName ? ` (${product.brandName})` : "";
   return `Olá, equipe Náutica Color! Tenho interesse neste produto e gostaria de confirmar disponibilidade, valor e indicação de uso:
 
@@ -28,4 +28,8 @@ Os valores do site são apenas referência. Aguardo a confirmação pelo WhatsAp
 
 export function whatsappUrl(message: string, number = fallbackNumber) {
   return `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
+}
+
+export function productWhatsappUrl(product: Product) {
+  return whatsappUrl(buildProductMessage(product), resolveWhatsappNumber());
 }

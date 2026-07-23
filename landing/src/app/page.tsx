@@ -3,24 +3,30 @@ import { Anchor, MapPin, MessageCircle, ShieldCheck } from "lucide-react";
 import { Header } from "@/components/Header";
 import { HeroWave } from "@/components/HeroWave";
 import { StoreExperience } from "@/components/StoreExperience";
-import { ProductShowcase } from "@/components/ProductShowcase";
 import { BrandsMarquee } from "@/components/BrandsMarquee";
 import { Eyebrow } from "@/components/Eyebrow";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { WhatsappIcon } from "@/components/WhatsappIcon";
 import { buildSupportMessage, resolveWhatsappNumber, whatsappUrl } from "@/lib/whatsapp";
-import { store } from "@/data/showcase";
+import { store } from "@/data/store";
+import { categories, getProductsByCategory } from "@/data/catalog";
+import { FeaturedCategories, type FeaturedGroup } from "@/components/products/FeaturedCategories";
 
 /**
  * LANDING PAGE — app independente do e-commerce.
  *
- * Vitrine de produtos + WhatsApp. Sem carrinho, sem catálogo e sem dados
- * externos: tudo funila para o atendimento via WhatsApp. Os produtos da vitrine
- * e as infos da loja ficam em src/data/showcase.ts.
+ * Vitrine de produtos + WhatsApp. Sem carrinho e sem dados externos: tudo
+ * funila para o atendimento via WhatsApp. Produtos por categoria ficam em
+ * src/data/products/ (gerados por scripts/extract-products.mjs) e as infos
+ * da loja em src/data/store.ts.
  */
 export default function LandingPage() {
   const whatsappNumber = resolveWhatsappNumber();
   const supportUrl = whatsappUrl(buildSupportMessage(), whatsappNumber);
+  const featuredGroups: FeaturedGroup[] = categories.map((category) => ({
+    category,
+    products: getProductsByCategory(category.slug).slice(0, 4)
+  }));
 
   return (
     <>
@@ -95,13 +101,13 @@ export default function LandingPage() {
                 Encontre o produto certo para a sua embarcação.
               </h2>
               <p className="mt-4 text-ink/70">
-                Conheça alguns dos produtos disponíveis na Náutica Color e fale diretamente com nossa equipe pelo WhatsApp.
+                Escolha uma categoria, confira alguns produtos e fale diretamente com nossa equipe pelo WhatsApp.
                 Tire dúvidas, confirme valores e disponibilidade e receba ajuda para escolher a melhor solução para cada
                 etapa do serviço.
               </p>
             </ScrollReveal>
             <ScrollReveal delay={180}>
-              <ProductShowcase />
+              <FeaturedCategories groups={featuredGroups} />
             </ScrollReveal>
           </div>
         </section>

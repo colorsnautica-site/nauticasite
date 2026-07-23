@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { partnerBrands } from "@/data/showcase";
+import { partnerBrands } from "@/data/store";
 
 /**
  * Carrossel infinito das marcas parceiras. Renderiza a lista duas vezes em uma
