@@ -40,7 +40,7 @@ function Intro() {
         <Eyebrow className="text-[10px]">Atendimento</Eyebrow>
       </div>
       <h2 className="mt-3 font-heading text-2xl font-extrabold leading-tight text-navy sm:text-3xl">
-        Tudo para sua embarcação, em um só lugar.
+        Tudo o que seu barco precisa, você encontra aqui.
       </h2>
       <p className="mt-4 text-sm leading-6 text-ink/70">
         Da preparação ao acabamento, do casco ao convés: estoque completo, marcas profissionais e uma equipe que conhece
