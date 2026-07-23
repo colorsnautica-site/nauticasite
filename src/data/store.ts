@@ -24,5 +24,5 @@ export const store = {
   whatsappVisible: "(24) 99844-7844",
   whatsappVisible2: "(24) 99303-7332",
   instagram: "@nauticacolor",
-  heroImage: "/hero/fachada-nautica.png"
+  heroImage: "/hero/hero-nautica.png"
 };
