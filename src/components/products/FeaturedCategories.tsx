@@ -15,8 +15,9 @@ export type FeaturedGroup = {
 /**
  * Seção "Produtos em destaque": abas de categoria + prévia (poucos produtos)
  * da categoria ativa + link "Ver todos" para o catálogo completo daquela
- * categoria. Recebe do server só uma prévia por categoria (não o catálogo
- * inteiro) para manter o payload do client leve.
+ * categoria, além de um botão "Ver todos os produtos" ao lado das abas para
+ * o catálogo inteiro. Recebe do server só uma prévia por categoria (não o
+ * catálogo inteiro) para manter o payload do client leve.
  */
 export function FeaturedCategories({ groups }: { groups: FeaturedGroup[] }) {
   const [activeSlug, setActiveSlug] = useState(groups[0]?.category.slug ?? "");
@@ -26,12 +27,20 @@ export function FeaturedCategories({ groups }: { groups: FeaturedGroup[] }) {
 
   return (
     <div className="mt-10">
-      <CategoryTabs
-        mode="state"
-        categories={groups.map((group) => group.category)}
-        activeSlug={activeSlug}
-        onSelect={setActiveSlug}
-      />
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <CategoryTabs
+          mode="state"
+          categories={groups.map((group) => group.category)}
+          activeSlug={activeSlug}
+          onSelect={setActiveSlug}
+        />
+        <Link
+          href="/produtos"
+          className="inline-flex shrink-0 items-center gap-2 font-semibold text-navy transition hover:text-red"
+        >
+          Ver todos os produtos <ArrowRight size={16} aria-hidden="true" />
+        </Link>
+      </div>
 
       <div className="mt-8">
         <ProductGrid products={active.products} />
