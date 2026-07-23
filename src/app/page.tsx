@@ -39,7 +39,7 @@ export default function LandingPage() {
             className="absolute inset-0 -z-20 bg-navy bg-cover bg-center"
             style={{ backgroundImage: `url('${store.heroImage}')` }}
           />
-          <div aria-hidden="true" className="absolute inset-0 -z-10 bg-gradient-to-r from-navy/95 via-navy/55 to-navy/5" />
+          <div aria-hidden="true" className="absolute inset-0 -z-10 bg-gradient-to-r from-navy/95 from-0% via-navy/55 via-25% to-navy/5 to-55%" />
           <div aria-hidden="true" className="absolute -right-24 top-4 -z-10 h-80 w-80 rounded-full bg-red/20 blur-3xl" />
 
           <div className="relative z-10 mx-auto flex min-h-[680px] max-w-7xl flex-col items-start justify-center gap-8 px-4 pb-52 pt-24 text-left sm:px-6 lg:px-8">
