@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { Anchor, MapPin, MessageCircle, ShieldCheck } from "lucide-react";
+import { MapPin, MessageCircle, ShieldCheck } from "lucide-react";
 import { Header } from "@/components/Header";
 import { HeroWave } from "@/components/HeroWave";
 import { StoreExperience } from "@/components/StoreExperience";
@@ -44,19 +44,16 @@ export default function LandingPage() {
 
           <div className="relative z-10 mx-auto flex min-h-[680px] max-w-7xl flex-col items-start justify-center gap-8 px-4 pb-52 pt-24 text-left sm:px-6 lg:px-8">
             <div className="max-w-3xl">
-              <p className="mb-5 inline-flex animate-fade-up items-center gap-2 text-sm font-semibold uppercase tracking-[0.2em] text-red">
-                <Anchor size={14} aria-hidden="true" /> Náutica Color
-              </p>
-              <h1 className="animate-fade-up font-heading text-2xl font-extrabold leading-[1.1] [animation-delay:80ms] sm:text-3xl lg:text-4xl">
-                <span className="block">Tudo para a sua embarcação</span>
+              <h1 className="animate-fade-up font-heading text-3xl font-extrabold leading-[1.1] [animation-delay:80ms] sm:text-4xl lg:text-5xl">
+                <span className="block text-[1.375rem] sm:text-[1.75rem] lg:text-[2.125rem]">Tudo para a sua embarcação</span>
                 <span
-                  className="mt-1 block text-[2.25rem] sm:text-[2.75rem] lg:text-[3.25rem]"
+                  className="mt-1 block text-[2.75rem] sm:text-[3.25rem] lg:text-[3.75rem]"
                   style={{ fontFamily: "var(--font-fraunces)" }}
                 >
                   em um só lugar
                 </span>
               </h1>
-              <p className="mt-5 max-w-2xl animate-fade-up text-base leading-7 text-white/80 [animation-delay:160ms]">
+              <p className="mt-5 max-w-2xl animate-fade-up text-[0.9rem] leading-7 text-white/80 [animation-delay:160ms]">
                 <span className="block sm:whitespace-nowrap">
                   Tintas, antifouling, acabamentos e abrasivos de alta performance.
                 </span>
@@ -71,25 +68,25 @@ export default function LandingPage() {
                 href={supportUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-red px-7 text-base font-semibold text-white shadow-soft transition hover:bg-red-bright"
+                className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-red px-7 text-lg font-semibold text-white shadow-soft transition hover:bg-red-bright"
               >
-                <WhatsappIcon className="h-[18px] w-[18px]" /> Falar com o atendimento
+                <WhatsappIcon className="h-[20px] w-[20px]" /> Falar com o atendimento
               </a>
             </div>
 
-            <div className="flex animate-fade-up flex-col gap-y-2 text-xs text-white/75 [animation-delay:300ms] sm:text-sm">
+            <div className="flex animate-fade-up flex-col gap-y-2 text-sm text-white/75 [animation-delay:300ms] sm:text-base">
               <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
                 {[
                   [ShieldCheck, "Linha profissional"],
                   [MessageCircle, "Atendimento pelo WhatsApp"]
                 ].map(([Icon, label]) => (
                   <span key={String(label)} className="inline-flex items-center gap-1.5">
-                    <Icon className="text-red" size={15} aria-hidden="true" /> {String(label)}
+                    <Icon className="text-red" size={17} aria-hidden="true" /> {String(label)}
                   </span>
                 ))}
               </div>
               <span className="inline-flex items-center gap-1.5">
-                <MapPin className="text-red" size={15} aria-hidden="true" /> Marina Verolme · Angra dos Reis
+                <MapPin className="text-red" size={17} aria-hidden="true" /> Marina Verolme · Angra dos Reis
               </span>
             </div>
           </div>
