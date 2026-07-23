@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="480" height="480" viewBox="0 0 480 480">
-  <rect width="480" height="480" fill="#EDECEC"/>
-  <path d="M96 124h288v232H96z" fill="#fff" stroke="#002659" stroke-width="10"/>
-  <path d="M118 150l244 180M118 210l196 146M166 124l218 162M230 124l154 114M96 290l90 66M362 150L118 330M314 124L96 286M384 252L244 356" stroke="#BE1A2C" stroke-width="8" opacity=".9"/>
-  <text x="240" y="415" text-anchor="middle" font-family="Arial" font-size="28" font-weight="800" fill="#002659">FIBRA</text>
-</svg>

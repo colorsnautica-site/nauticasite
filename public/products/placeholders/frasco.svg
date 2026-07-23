@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="480" height="480" viewBox="0 0 480 480">
-  <rect width="480" height="480" fill="#EDECEC"/>
-  <path d="M204 90h72v58l36 46v176c0 24-20 44-44 44h-56c-24 0-44-20-44-44V194l36-46z" fill="#fff" stroke="#002659" stroke-width="10"/>
-  <path d="M184 242h112v82H184z" fill="#BE1A2C"/>
-  <text x="240" y="293" text-anchor="middle" font-family="Arial" font-size="24" font-weight="800" fill="#fff">SPRAY</text>
-</svg>

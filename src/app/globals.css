@@ -4,9 +4,6 @@
 /* escala tipografica reduzida definida em tailwind.config.ts */
 
 @layer base {
-  /* Tracking levemente negativo nos titulos (Space Grotesk) para um ar
-     tecnico/compacto. Mira a classe font-heading, padrao real de titulos
-     do projeto. */
   .font-heading {
     letter-spacing: -0.02em;
   }
@@ -34,7 +31,9 @@ html {
 
 body {
   margin: 0;
-  overflow-x: hidden;
+  /* `clip` evita scroll horizontal SEM criar um contexto de rolagem — assim não
+     quebra `position: sticky` (o que `overflow-x: hidden` faria). */
+  overflow-x: clip;
   background: var(--off-white);
   color: var(--ink);
   font-family: var(--font-inter), sans-serif;
@@ -46,21 +45,6 @@ input,
 select {
   outline-color: var(--red);
   outline-offset: 3px;
-}
-
-@keyframes page-enter {
-  from {
-    opacity: 1;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.page-enter {
-  animation: page-enter 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 /* Offset de ancoras abaixo do header sticky (~80px) ao navegar para #id */
@@ -79,13 +63,8 @@ section[id] {
   }
 }
 
-.wave-panel {
-  position: relative;
-  overflow: hidden;
-}
-
-/* Onda em camadas (parallax) do hero — adaptada do efeito "gentle wave".
-   Cada camada desliza na horizontal em velocidade/atraso diferentes. */
+/* Onda em camadas (parallax) do hero — cada camada desliza na horizontal em
+   velocidade/atraso diferentes. */
 @keyframes wave-move-forever {
   0% {
     transform: translate(0, 0);
@@ -116,15 +95,22 @@ section[id] {
   animation-duration: 10s;
 }
 
-.wave-panel::after {
-  background: radial-gradient(circle at 15% 30%, rgba(255, 255, 255, 0.16), transparent 24%),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent);
-  border-radius: 999px 0 0 999px;
-  content: "";
-  height: 260px;
-  position: absolute;
-  right: -80px;
-  top: 48px;
-  transform: rotate(-12deg);
-  width: 420px;
+/* Onda PARADA que forma a base do header. A faixa de onda é uma imagem que se
+   repete na horizontal (um comprimento = 60px), ancorada à esquerda — silhueta
+   branca e preenchimento navy usam a mesma imagem, então ficam alinhados. */
+.header-edge-wave {
+  background-repeat: repeat-x;
+  background-position: left top;
+  background-size: 60px 100%;
+}
+
+/* Carrossel infinito das marcas parceiras. A trilha tem duas cópias da lista;
+   deslizar -50% avança exatamente uma cópia, fechando o loop sem emenda. */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }

@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="480" height="480" viewBox="0 0 480 480">
-  <rect width="480" height="480" fill="#EDECEC"/>
-  <path d="M164 152h152c27 0 48 21 48 48v150c0 27-21 48-48 48H164c-27 0-48-21-48-48V200c0-27 21-48 48-48z" fill="#fff" stroke="#002659" stroke-width="10"/>
-  <path d="M188 152v-36h104v36" fill="none" stroke="#002659" stroke-width="10"/>
-  <path d="M156 240h168v92H156z" fill="#BE1A2C"/>
-  <text x="240" y="295" text-anchor="middle" font-family="Arial" font-size="32" font-weight="800" fill="#fff">GALÃO</text>
-</svg>
