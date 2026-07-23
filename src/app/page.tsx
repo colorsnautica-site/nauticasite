@@ -48,7 +48,7 @@ export default function LandingPage() {
                 <Anchor size={16} aria-hidden="true" /> Náutica Color
               </p>
               <h1 className="animate-fade-up font-heading text-3xl font-extrabold leading-[1.1] [animation-delay:80ms] sm:text-4xl lg:text-5xl">
-                <span className="block text-[1.625rem] sm:text-[2rem] lg:text-[2.5rem]">Tudo para a sua embarcação</span>
+                <span className="block text-2xl sm:text-3xl lg:text-4xl">Tudo para a sua embarcação</span>
                 <span
                   className="mt-1 block text-[2.75rem] sm:text-[3.25rem] lg:text-[3.75rem]"
                   style={{ fontFamily: "var(--font-fraunces)" }}
