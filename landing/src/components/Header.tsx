@@ -4,12 +4,13 @@
 import { useEffect, useState } from "react";
 import { WhatsappIcon } from "@/components/WhatsappIcon";
 
-// Seções do site para a navegação do header.
+// Seções do site para a navegação do header. Prefixadas com "/" para
+// funcionarem tanto na home quanto nas páginas /produtos/*.
 const SECTIONS = [
-  { href: "#produtos", label: "Produtos" },
-  { href: "#marcas", label: "Marcas" },
-  { href: "#atendimento", label: "Atendimento" },
-  { href: "#contato", label: "Contato" },
+  { href: "/#produtos", label: "Produtos" },
+  { href: "/#marcas", label: "Marcas" },
+  { href: "/#atendimento", label: "Atendimento" },
+  { href: "/#contato", label: "Contato" },
 ] as const;
 
 /**
@@ -76,7 +77,7 @@ export function Header({ supportUrl }: { supportUrl: string }) {
       />
 
       <div className="relative mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-        <a href="#topo" className="flex items-center gap-3" aria-label="Náutica Color">
+        <a href="/#topo" className="flex items-center gap-3" aria-label="Náutica Color">
           <img src="/brand/nautica-color-logo.png" alt="Náutica Color" className="h-11 w-auto sm:h-12" />
         </a>
 
