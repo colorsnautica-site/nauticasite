@@ -18,7 +18,7 @@ export function ProductCard({
   const stockLabel = product.stockStatus === "available" ? "Disponível" : "Sob consulta";
 
   return (
-    <article className="group flex h-full flex-col rounded-[28px] border border-navy/10 bg-white p-3 shadow-sm transition hover:-translate-y-1 hover:border-red/20 hover:shadow-soft">
+    <article className="group flex h-full flex-col rounded-[28px] bg-white p-3 shadow-sm transition hover:-translate-y-1 hover:shadow-soft">
       <div className="relative aspect-[3/2] overflow-hidden rounded-3xl bg-sky transition group-hover:bg-mist">
         <span className="absolute right-3 top-3 z-10 rounded-full bg-white px-2.5 py-1 text-[11px] font-semibold text-navy shadow-sm">
           {stockLabel}

@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { Anchor, MapPin, MessageCircle, ShieldCheck } from "lucide-react";
+import { MapPin, MessageCircle, ShieldCheck } from "lucide-react";
 import { Header } from "@/components/Header";
 import { HeroWave } from "@/components/HeroWave";
 import { StoreExperience } from "@/components/StoreExperience";
@@ -44,11 +44,8 @@ export default function LandingPage() {
 
           <div className="relative z-10 mx-auto flex min-h-[680px] max-w-7xl flex-col items-start justify-center gap-8 px-4 pb-52 pt-24 text-left sm:px-6 lg:px-8">
             <div className="max-w-3xl">
-              <p className="mb-5 inline-flex animate-fade-up items-center gap-2 text-base font-semibold uppercase tracking-[0.2em] text-red">
-                <Anchor size={16} aria-hidden="true" /> Náutica Color
-              </p>
               <h1 className="animate-fade-up font-heading text-3xl font-extrabold leading-[1.1] [animation-delay:80ms] sm:text-4xl lg:text-5xl">
-                <span className="block text-2xl sm:text-3xl lg:text-4xl">Tudo para a sua embarcação</span>
+                <span className="block text-[1.375rem] sm:text-[1.75rem] lg:text-[2.125rem]">Tudo para a sua embarcação</span>
                 <span
                   className="mt-1 block text-[2.75rem] sm:text-[3.25rem] lg:text-[3.75rem]"
                   style={{ fontFamily: "var(--font-fraunces)" }}
@@ -56,7 +53,7 @@ export default function LandingPage() {
                   em um só lugar
                 </span>
               </h1>
-              <p className="mt-5 max-w-2xl animate-fade-up text-lg leading-7 text-white/80 [animation-delay:160ms]">
+              <p className="mt-5 max-w-2xl animate-fade-up text-[0.9rem] leading-7 text-white/80 [animation-delay:160ms]">
                 <span className="block sm:whitespace-nowrap">
                   Tintas, antifouling, acabamentos e abrasivos de alta performance.
                 </span>
