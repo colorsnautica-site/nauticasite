@@ -77,16 +77,20 @@ export default function LandingPage() {
               </a>
             </div>
 
-            <div className="flex animate-fade-up flex-wrap items-center justify-start gap-x-4 gap-y-2 text-[0.625rem] text-white/75 [animation-delay:300ms] sm:text-[0.6875rem]">
-              {[
-                [ShieldCheck, "Linha profissional"],
-                [MessageCircle, "Atendimento pelo WhatsApp"],
-                [MapPin, "Marina Verolme · Angra dos Reis"]
-              ].map(([Icon, label]) => (
-                <span key={String(label)} className="inline-flex items-center gap-1.5">
-                  <Icon className="text-red" size={15} aria-hidden="true" /> {String(label)}
-                </span>
-              ))}
+            <div className="flex animate-fade-up flex-col gap-y-2 text-[0.625rem] text-white/75 [animation-delay:300ms] sm:text-[0.6875rem]">
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+                {[
+                  [ShieldCheck, "Linha profissional"],
+                  [MessageCircle, "Atendimento pelo WhatsApp"]
+                ].map(([Icon, label]) => (
+                  <span key={String(label)} className="inline-flex items-center gap-1.5">
+                    <Icon className="text-red" size={15} aria-hidden="true" /> {String(label)}
+                  </span>
+                ))}
+              </div>
+              <span className="inline-flex items-center gap-1.5">
+                <MapPin className="text-red" size={15} aria-hidden="true" /> Marina Verolme · Angra dos Reis
+              </span>
             </div>
           </div>
 
