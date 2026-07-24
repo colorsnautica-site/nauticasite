@@ -8,7 +8,8 @@ import { Eyebrow } from "@/components/Eyebrow";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { WhatsappIcon } from "@/components/WhatsappIcon";
 import { buildSupportMessage, resolveWhatsappNumber, whatsappUrl } from "@/lib/whatsapp";
-import { store } from "@/data/store";
+import { getSiteContent } from "@/db/queries/content";
+import { getBrands } from "@/db/queries/brands";
 import { categories, getProductsByCategory } from "@/data/catalog";
 import { FeaturedCategories, type FeaturedGroup } from "@/components/products/FeaturedCategories";
 
@@ -17,8 +18,9 @@ import { FeaturedCategories, type FeaturedGroup } from "@/components/products/Fe
  *
  * Vitrine de produtos + WhatsApp. Sem carrinho e sem dados externos: tudo
  * funila para o atendimento via WhatsApp. Produtos por categoria ficam em
- * src/data/products/ (gerados por scripts/extract-products.mjs) e as infos
- * da loja em src/data/store.ts.
+ * src/data/products/ (gerados por scripts/extract-products.mjs). Hero,
+ * contato e marcas parceiras vêm do banco (editáveis em /admin), com os
+ * textos originais como fallback caso o banco ainda não tenha os valores.
  */
 export default async function LandingPage() {
   const whatsappNumber = resolveWhatsappNumber();
@@ -29,6 +31,22 @@ export default async function LandingPage() {
       products: (await getProductsByCategory(category.slug)).slice(0, 4)
     }))
   );
+
+  const content = await getSiteContent();
+  const brands = await getBrands();
+  const store = {
+    companyName: content.company_name || "Náutica Color",
+    location: content.location || "Marina Verolme, Angra dos Reis - RJ",
+    phone: content.phone || "(24) 2404-4606",
+    whatsappVisible: content.whatsapp_1 || "(24) 99844-7844",
+    whatsappVisible2: content.whatsapp_2 || "(24) 99303-7332",
+    instagram: content.instagram || "@nauticacolor",
+    heroImage: content.hero_image || "/hero/hero-nautica.png"
+  };
+  const heroTitle = content.hero_title || "Tudo para a sua embarcação em um só lugar";
+  const heroDescription =
+    content.hero_description ||
+    "Tintas, antifouling, acabamentos e abrasivos de alta performance. Escolha o produto e fale direto com a equipe pelo WhatsApp.";
 
   return (
     <>
@@ -47,21 +65,10 @@ export default async function LandingPage() {
           <div className="relative z-10 mx-auto flex min-h-[680px] max-w-7xl flex-col items-start justify-center gap-8 px-4 pb-52 pt-24 text-left sm:px-6 lg:px-8">
             <div className="max-w-3xl">
               <h1 className="animate-fade-up font-heading text-3xl font-extrabold leading-[1.1] [animation-delay:80ms] sm:text-4xl lg:text-5xl">
-                <span className="block text-[1.375rem] sm:text-[1.75rem] lg:text-[2.125rem]">Tudo para a sua embarcação</span>
-                <span
-                  className="mt-1 block text-[2.75rem] sm:text-[3.25rem] lg:text-[3.75rem]"
-                  style={{ fontFamily: "var(--font-fraunces)" }}
-                >
-                  em um só lugar
-                </span>
+                {heroTitle}
               </h1>
               <p className="mt-5 max-w-2xl animate-fade-up text-[0.9rem] leading-7 text-white/80 [animation-delay:160ms]">
-                <span className="block sm:whitespace-nowrap">
-                  Tintas, antifouling, acabamentos e abrasivos de alta performance.
-                </span>
-                <span className="block">
-                  Escolha o produto e fale direto com a equipe pelo WhatsApp.
-                </span>
+                {heroDescription}
               </p>
             </div>
 
@@ -121,7 +128,7 @@ export default async function LandingPage() {
             <h2 className="mt-3 font-heading text-3xl font-extrabold leading-tight text-navy sm:text-4xl">Linhas profissionais em um catálogo único.</h2>
           </ScrollReveal>
           <ScrollReveal delay={180}>
-            <BrandsMarquee />
+            <BrandsMarquee brands={brands} />
           </ScrollReveal>
         </section>
 
