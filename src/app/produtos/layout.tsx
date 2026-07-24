@@ -2,10 +2,12 @@ import type { ReactNode } from "react";
 import { Header } from "@/components/Header";
 import { WhatsappIcon } from "@/components/WhatsappIcon";
 import { buildSupportMessage, resolveWhatsappNumber, whatsappUrl } from "@/lib/whatsapp";
-import { store } from "@/data/store";
+import { getSiteContent } from "@/db/queries/content";
 
-export default function ProdutosLayout({ children }: { children: ReactNode }) {
+export default async function ProdutosLayout({ children }: { children: ReactNode }) {
   const supportUrl = whatsappUrl(buildSupportMessage(), resolveWhatsappNumber());
+  const content = await getSiteContent();
+  const location = content.location || "Marina Verolme, Angra dos Reis - RJ";
 
   return (
     <>
@@ -13,7 +15,7 @@ export default function ProdutosLayout({ children }: { children: ReactNode }) {
       <main>{children}</main>
 
       <footer className="bg-navy py-8 text-center text-xs text-white/60">
-        <p>© Náutica Color · {store.location}</p>
+        <p>© Náutica Color · {location}</p>
       </footer>
 
       <a

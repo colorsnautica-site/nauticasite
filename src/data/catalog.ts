@@ -7,7 +7,7 @@
 // para um placeholder generico ate as fotos oficiais serem cadastradas.
 // ───────────────────────────────────────────────────────────────────────────
 
-import { productsBySlug } from "./products/index";
+import { getAllProductsDb, getProductsByCategoryDb } from "@/db/queries/products";
 
 export type StockStatus = "available" | "on_request";
 
@@ -45,12 +45,12 @@ export function getCategoryBySlug(slug: string): Category | undefined {
   return categories.find((category) => category.slug === slug);
 }
 
-export function getProductsByCategory(slug: string): Product[] {
-  return productsBySlug[slug] ?? [];
+export async function getProductsByCategory(slug: string): Promise<Product[]> {
+  return getProductsByCategoryDb(slug);
 }
 
-export function getAllProducts(): Product[] {
-  return categories.flatMap((category) => productsBySlug[category.slug] ?? []);
+export async function getAllProducts(): Promise<Product[]> {
+  return getAllProductsDb();
 }
 
 export type Page<T> = {

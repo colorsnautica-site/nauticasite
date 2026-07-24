@@ -17,7 +17,8 @@ export default async function ProdutosPage({
 }) {
   const { page: pageParam } = await searchParams;
   const page = Number(pageParam) || 1;
-  const { items, page: currentPage, totalPages, total } = paginate(getAllProducts(), page);
+  const all = await getAllProducts();
+  const { items, page: currentPage, totalPages, total } = paginate(all, page);
 
   return (
     <section className="bg-white py-16">

@@ -24,3 +24,5 @@ next-env.d.ts
 
 # preview tooling
 .preview-logs/
+.vercel
+.env*
