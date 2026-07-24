@@ -39,7 +39,8 @@ export default async function CategoriaPage({
 
   const { page: pageParam } = await searchParams;
   const page = Number(pageParam) || 1;
-  const { items, page: currentPage, totalPages, total } = paginate(getProductsByCategory(categoria), page);
+  const products = await getProductsByCategory(categoria);
+  const { items, page: currentPage, totalPages, total } = paginate(products, page);
 
   return (
     <section className="bg-white py-16">

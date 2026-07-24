@@ -20,13 +20,15 @@ import { FeaturedCategories, type FeaturedGroup } from "@/components/products/Fe
  * src/data/products/ (gerados por scripts/extract-products.mjs) e as infos
  * da loja em src/data/store.ts.
  */
-export default function LandingPage() {
+export default async function LandingPage() {
   const whatsappNumber = resolveWhatsappNumber();
   const supportUrl = whatsappUrl(buildSupportMessage(), whatsappNumber);
-  const featuredGroups: FeaturedGroup[] = categories.map((category) => ({
-    category,
-    products: getProductsByCategory(category.slug).slice(0, 4)
-  }));
+  const featuredGroups: FeaturedGroup[] = await Promise.all(
+    categories.map(async (category) => ({
+      category,
+      products: (await getProductsByCategory(category.slug)).slice(0, 4)
+    }))
+  );
 
   return (
     <>
