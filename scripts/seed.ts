@@ -18,6 +18,28 @@ async function main() {
   const { db } = await import("@/db/client");
   const { products, siteContent, partnerBrands } = await import("@/db/schema");
 
+  // Guarda de segurança: o banco é a fonte de verdade (todas as edições do
+  // painel admin vivem lá). Rodar este seed sem querer apagaria tudo e
+  // recolocaria os dados estáticos antigos de src/data/*. Só prossegue se a
+  // tabela `products` estiver vazia, ou se o override explícito for passado.
+  const force = process.env.SEED_FORCE === "1" || process.argv.includes("--force");
+  const existingProduct = await db.select({ id: products.id }).from(products).limit(1);
+  if (existingProduct.length > 0 && !force) {
+    console.error(
+      "ERRO: a tabela 'products' já contém dados — o seed foi cancelado.\n\n" +
+      "Este script APAGA products/siteContent/partnerBrands antes de repopular a partir dos\n" +
+      "arquivos estáticos antigos (src/data/products/*.ts, src/data/store.ts). Como o banco é\n" +
+      "agora a fonte de verdade (todas as edições feitas pelo painel admin vivem lá), rodar\n" +
+      "`npm run db:seed` de novo apagaria silenciosamente todas essas edições e voltaria aos\n" +
+      "dados estáticos desatualizados.\n\n" +
+      "Se você tem certeza de que quer isso (ex.: resetar um ambiente de dev/teste do zero),\n" +
+      "rode de novo com um destes overrides:\n" +
+      "  SEED_FORCE=1 npm run db:seed\n" +
+      "  npm run db:seed -- --force"
+    );
+    process.exit(1);
+  }
+
   const all = Object.values(productsBySlug).flat();
 
   await db.delete(products);
