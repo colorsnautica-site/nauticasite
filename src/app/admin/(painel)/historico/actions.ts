@@ -32,8 +32,17 @@ export async function undoAction(formData: FormData) {
       if (updated.length === 0) throw new Error(STALE_UNDO_ERROR);
       reversal = { action: "update", entityId: entry.entityId, before: entry.snapshotAfter, after: entry.snapshotBefore };
     } else if (op === "recreate") {
-      const { id: _i, ...rest } = data as any;
-      const [inserted] = await db.insert(products).values(rest).returning();
+      // snapshotBefore vem de uma coluna JSONB: createdAt/updatedAt chegam como strings ISO,
+      // não como Date. O driver do postgres-js exige Date de verdade para colunas timestamp.
+      const { id: _i, createdAt, updatedAt, ...rest } = data as any;
+      const [inserted] = await db
+        .insert(products)
+        .values({
+          ...rest,
+          createdAt: createdAt ? new Date(createdAt) : new Date(),
+          updatedAt: updatedAt ? new Date(updatedAt) : new Date(),
+        })
+        .returning();
       reversal = { action: "create", entityId: String(inserted.id), before: null, after: inserted };
     } else {
       const deleted = await db.delete(products).where(eq(products.id, id)).returning();
