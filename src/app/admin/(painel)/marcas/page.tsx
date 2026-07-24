@@ -26,7 +26,7 @@ export default async function AdminMarcas() {
             <p className="mt-2 text-sm font-semibold text-navy">{b.name}</p>
             <form action={deleteBrandAction}>
               <input type="hidden" name="id" value={b.id} />
-              <button className="mt-2 text-xs font-semibold text-red">Remover</button>
+              <button className="mt-2 rounded-full px-3 py-2 text-xs font-semibold text-red">Remover</button>
             </form>
           </div>
         ))}
