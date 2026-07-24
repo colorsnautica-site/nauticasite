@@ -8,6 +8,7 @@ import { recordChange } from "@/db/changelog";
 import { uploadImage } from "@/lib/blob";
 import { parseReaisToCents } from "@/lib/money";
 import { PRODUCTS_TAG } from "@/db/queries/products";
+import { requireAdminSession } from "@/lib/require-admin-session";
 
 function revalidate() {
   revalidateTag(PRODUCTS_TAG);
@@ -34,6 +35,7 @@ function readCommonFields(formData: FormData) {
 }
 
 export async function updateProductAction(formData: FormData) {
+  await requireAdminSession();
   const id = Number(formData.get("id"));
   const [before] = await db.select().from(products).where(eq(products.id, id));
   if (!before) throw new Error("Produto não encontrado.");
@@ -47,6 +49,7 @@ export async function updateProductAction(formData: FormData) {
 }
 
 export async function createProductAction(formData: FormData) {
+  await requireAdminSession();
   const fields = readCommonFields(formData);
   const newImage = await readImage(formData, "produtos");
   const [after] = await db.insert(products).values({
@@ -58,6 +61,7 @@ export async function createProductAction(formData: FormData) {
 }
 
 export async function deleteProductAction(formData: FormData) {
+  await requireAdminSession();
   const id = Number(formData.get("id"));
   const [before] = await db.select().from(products).where(eq(products.id, id));
   if (!before) return;
