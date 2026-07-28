@@ -31,15 +31,25 @@ function buildPageList(current: number, total: number): (number | "dots")[] {
 export function Pagination({
   basePath,
   page,
-  totalPages
+  totalPages,
+  params = {}
 }: {
   basePath: string;
   page: number;
   totalPages: number;
+  params?: Record<string, string | undefined>;
 }) {
   if (totalPages <= 1) return null;
 
-  const pageHref = (target: number) => (target === 1 ? basePath : `${basePath}?page=${target}`);
+  const pageHref = (target: number) => {
+    const searchParams = new URLSearchParams();
+    for (const [key, value] of Object.entries(params)) {
+      if (value) searchParams.set(key, value);
+    }
+    if (target > 1) searchParams.set("page", String(target));
+    const query = searchParams.toString();
+    return query ? `${basePath}?${query}` : basePath;
+  };
   const pages = buildPageList(page, totalPages);
 
   return (
