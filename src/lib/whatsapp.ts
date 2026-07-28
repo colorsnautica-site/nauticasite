@@ -1,12 +1,15 @@
 import { formatPriceLabel } from "@/lib/currency";
 import type { Product } from "@/data/catalog";
+import { phoneToDigits } from "@/lib/phone";
 
 // Número padrão; pode ser sobrescrito pela env NEXT_PUBLIC_WHATSAPP_NUMBER no
 // projeto Vercel da landing.
 const fallbackNumber = "5524998447844";
 
-export function resolveWhatsappNumber() {
-  return process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || fallbackNumber;
+export function resolveWhatsappNumber(contentValue?: string) {
+  return phoneToDigits(contentValue ?? "")
+    ?? phoneToDigits(process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "")
+    ?? fallbackNumber;
 }
 
 export function buildSupportMessage() {
@@ -30,6 +33,6 @@ export function whatsappUrl(message: string, number = fallbackNumber) {
   return `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
 }
 
-export function productWhatsappUrl(product: Product) {
-  return whatsappUrl(buildProductMessage(product), resolveWhatsappNumber());
+export function productWhatsappUrl(product: Product, number?: string) {
+  return whatsappUrl(buildProductMessage(product), number ?? resolveWhatsappNumber());
 }

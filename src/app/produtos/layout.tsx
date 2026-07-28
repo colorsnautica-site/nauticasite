@@ -5,9 +5,10 @@ import { buildSupportMessage, resolveWhatsappNumber, whatsappUrl } from "@/lib/w
 import { getSiteContent } from "@/db/queries/content";
 
 export default async function ProdutosLayout({ children }: { children: ReactNode }) {
-  const supportUrl = whatsappUrl(buildSupportMessage(), resolveWhatsappNumber());
   const content = await getSiteContent();
+  const supportUrl = whatsappUrl(buildSupportMessage(), resolveWhatsappNumber(content.whatsapp_1));
   const location = content.location || "Marina Verolme, Angra dos Reis - RJ";
+  const companyName = content.company_name || "Náutica Color";
 
   return (
     <>
@@ -15,7 +16,7 @@ export default async function ProdutosLayout({ children }: { children: ReactNode
       <main>{children}</main>
 
       <footer className="bg-navy py-8 text-center text-xs text-white/60">
-        <p>© Náutica Color · {location}</p>
+        <p>© {companyName} · {location}</p>
       </footer>
 
       <a

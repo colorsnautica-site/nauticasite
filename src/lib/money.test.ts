@@ -1,15 +1,22 @@
-import { describe, it, expect } from "vitest";
-import { parseReaisToCents, centsToReaisInput } from "./money";
+import { describe, expect, it } from "vitest";
+import { centsToReaisInput, parseReaisToCents } from "./money";
 
 describe("parseReaisToCents", () => {
-  it("aceita virgula, ponto e prefixo R$", () => {
-    expect(parseReaisToCents("12,50")).toBe(1250);
-    expect(parseReaisToCents("12.50")).toBe(1250);
-    expect(parseReaisToCents("R$ 12,50")).toBe(1250);
-    expect(parseReaisToCents("100")).toBe(10000);
+  it.each([
+    ["1234", 123400],
+    ["1.234", 123400],
+    ["1234,56", 123456],
+    ["1.234,56", 123456],
+    ["R$ 1.234,5", 123450],
+    ["", 0]
+  ])("converte %s", (input, expected) => {
+    expect(parseReaisToCents(input)).toBe(expected);
   });
-  it("vazio vira 0 (Sob consulta)", () => { expect(parseReaisToCents("")).toBe(0); });
-  it("invalido vira null", () => { expect(parseReaisToCents("abc")).toBeNull(); });
+
+  it.each(["12.50", "1,234.56", "1.23", "-10", "abc", "10,999", "10 00", "10.000.000,00"])(
+    "rejeita formato ambíguo ou fora do limite: %s",
+    (input) => expect(parseReaisToCents(input)).toBeNull()
+  );
 });
 
 describe("centsToReaisInput", () => {

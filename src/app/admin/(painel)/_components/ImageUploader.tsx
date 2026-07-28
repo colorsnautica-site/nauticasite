@@ -11,9 +11,9 @@ export function ImageUploader({ current, name = "imagem" }: { current?: string; 
         // eslint-disable-next-line @next/next/no-img-element
         <img src={preview} alt="" className="h-20 w-20 rounded-xl object-cover ring-1 ring-navy/10" />
       ) : (
-        <span className="grid h-20 w-20 place-items-center rounded-xl bg-sky text-xs text-ink/50">sem foto</span>
+        <span className="grid h-20 w-20 place-items-center rounded-xl bg-sky px-2 text-center text-xs text-ink/50">Imagem em breve</span>
       )}
-      <input type="file" name={name} accept="image/*" className="mt-2 block w-full text-xs"
+      <input type="file" name={name} accept="image/jpeg,image/png,image/webp,image/avif" className="mt-2 block w-full text-xs"
         onChange={(e) => { const f = e.target.files?.[0]; if (f) setPreview(URL.createObjectURL(f)); }} />
     </label>
   );

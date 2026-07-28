@@ -1,71 +1,97 @@
 "use server";
 
-import { revalidateTag, revalidatePath } from "next/cache";
-import { eq } from "drizzle-orm";
-import { db } from "@/db/client";
-import { products } from "@/db/schema";
-import { recordChange } from "@/db/changelog";
-import { uploadImage } from "@/lib/blob";
-import { parseReaisToCents } from "@/lib/money";
+import { revalidatePath, revalidateTag } from "next/cache";
+import { createProduct, deleteProduct, updateProduct, type ProductMutationInput } from "@/db/mutations";
 import { PRODUCTS_TAG } from "@/db/queries/products";
+import { actionErrorResult, type ActionResult, validationResult } from "@/lib/action-result";
+import { idSchema, productFormSchema } from "@/lib/admin-validation";
+import { deleteImageBestEffort, uploadImage } from "@/lib/blob";
 import { requireAdminSession } from "@/lib/require-admin-session";
 
-function revalidate() {
+function revalidateProducts() {
   revalidateTag(PRODUCTS_TAG);
   revalidatePath("/");
   revalidatePath("/produtos");
+  revalidatePath("/admin/produtos");
 }
 
-async function readImage(formData: FormData, prefix: string): Promise<string | null> {
-  const file = formData.get("imagem");
-  if (file instanceof File && file.size > 0) return uploadImage(file, prefix);
-  return null;
-}
-
-function readCommonFields(formData: FormData) {
-  const priceCents = parseReaisToCents(String(formData.get("precoReais") ?? ""));
-  if (priceCents === null) throw new Error("Preço inválido.");
-  return {
-    name: String(formData.get("name") ?? "").trim(),
-    brandName: String(formData.get("brandName") ?? "").trim(),
-    categorySlug: String(formData.get("categorySlug") ?? "").trim(),
+function productInput(formData: FormData) {
+  return productFormSchema.safeParse({
+    sku: String(formData.get("sku") ?? ""),
+    name: String(formData.get("name") ?? ""),
+    brandName: String(formData.get("brandName") ?? ""),
+    categorySlug: String(formData.get("categorySlug") ?? ""),
     stockStatus: String(formData.get("stockStatus") ?? "available"),
-    priceCents
+    unit: String(formData.get("unit") ?? "UN"),
+    precoReais: String(formData.get("precoReais") ?? "")
+  });
+}
+
+function toMutationInput(value: ReturnType<typeof productFormSchema.parse>): ProductMutationInput {
+  return {
+    sku: value.sku,
+    name: value.name,
+    brandName: value.brandName,
+    categorySlug: value.categorySlug,
+    stockStatus: value.stockStatus,
+    unit: value.unit,
+    priceCents: value.precoReais
   };
 }
 
-export async function updateProductAction(formData: FormData) {
-  await requireAdminSession();
-  const id = Number(formData.get("id"));
-  const [before] = await db.select().from(products).where(eq(products.id, id));
-  if (!before) throw new Error("Produto não encontrado.");
-  const fields = readCommonFields(formData);
-  const newImage = await readImage(formData, "produtos");
-  const [after] = await db.update(products)
-    .set({ ...fields, imageUrl: newImage ?? before.imageUrl, updatedAt: new Date() })
-    .where(eq(products.id, id)).returning();
-  await recordChange({ entityType: "product", entityId: String(id), action: "update", before, after });
-  revalidate();
+async function uploadedImage(formData: FormData): Promise<string | null> {
+  const file = formData.get("imagem");
+  return file instanceof File && file.size > 0 ? uploadImage(file, "produtos") : null;
 }
 
-export async function createProductAction(formData: FormData) {
+export async function updateProductAction(_state: ActionResult, formData: FormData): Promise<ActionResult> {
   await requireAdminSession();
-  const fields = readCommonFields(formData);
-  const newImage = await readImage(formData, "produtos");
-  const [after] = await db.insert(products).values({
-    sku: String(formData.get("sku") ?? "").trim(),
-    ...fields, unit: String(formData.get("unit") ?? "UN"), imageUrl: newImage ?? ""
-  }).returning();
-  await recordChange({ entityType: "product", entityId: String(after.id), action: "create", before: null, after });
-  revalidate();
+  const parsedId = idSchema.safeParse(formData.get("id"));
+  const parsed = productInput(formData);
+  if (!parsedId.success) return validationResult(parsedId.error);
+  if (!parsed.success) return validationResult(parsed.error);
+
+  let newImage: string | null = null;
+  try {
+    newImage = await uploadedImage(formData);
+    const result = await updateProduct(parsedId.data, toMutationInput(parsed.data), newImage);
+    if (result.changed) revalidateProducts();
+    return {
+      status: "success",
+      message: result.changed ? "Produto salvo." : "Nenhuma alteração para salvar."
+    };
+  } catch (error) {
+    await deleteImageBestEffort(newImage);
+    return actionErrorResult(error);
+  }
 }
 
-export async function deleteProductAction(formData: FormData) {
+export async function createProductAction(_state: ActionResult, formData: FormData): Promise<ActionResult> {
   await requireAdminSession();
-  const id = Number(formData.get("id"));
-  const [before] = await db.select().from(products).where(eq(products.id, id));
-  if (!before) return;
-  await db.delete(products).where(eq(products.id, id));
-  await recordChange({ entityType: "product", entityId: String(id), action: "delete", before, after: null });
-  revalidate();
+  const parsed = productInput(formData);
+  if (!parsed.success) return validationResult(parsed.error);
+
+  let newImage: string | null = null;
+  try {
+    newImage = await uploadedImage(formData);
+    await createProduct(toMutationInput(parsed.data), newImage ?? "");
+    revalidateProducts();
+    return { status: "success", message: "Produto adicionado." };
+  } catch (error) {
+    await deleteImageBestEffort(newImage);
+    return actionErrorResult(error);
+  }
+}
+
+export async function deleteProductAction(_state: ActionResult, formData: FormData): Promise<ActionResult> {
+  await requireAdminSession();
+  const parsedId = idSchema.safeParse(formData.get("id"));
+  if (!parsedId.success) return validationResult(parsedId.error);
+  try {
+    await deleteProduct(parsedId.data);
+    revalidateProducts();
+    return { status: "success", message: "Produto removido. A imagem foi mantida para permitir desfazer." };
+  } catch (error) {
+    return actionErrorResult(error);
+  }
 }

@@ -23,12 +23,16 @@ export function ProductCard({
         <span className="absolute right-3 top-3 z-10 rounded-full bg-white px-2.5 py-1 text-[11px] font-semibold text-navy shadow-sm">
           {stockLabel}
         </span>
-        <img
-          src={product.imageUrl}
-          alt={product.name}
-          loading="lazy"
-          className="h-full w-full object-cover transition-transform duration-300 ease-nautica group-hover:scale-105"
-        />
+        {product.imageUrl ? (
+          <img
+            src={product.imageUrl}
+            alt={product.name}
+            loading="lazy"
+            className="h-full w-full object-cover transition-transform duration-300 ease-nautica group-hover:scale-105"
+          />
+        ) : (
+          <span className="grid h-full place-items-center px-4 text-center text-sm font-semibold text-navy/45">Imagem em breve</span>
+        )}
       </div>
       <div className="mt-3 flex flex-1 flex-col px-2">
         <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
