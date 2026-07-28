@@ -4,6 +4,8 @@ import { CategoryTabs } from "@/components/products/CategoryTabs";
 import { ProductGrid } from "@/components/products/ProductGrid";
 import { Pagination } from "@/components/products/Pagination";
 import { categories, getAllProducts, paginate } from "@/data/catalog";
+import { getSiteContent } from "@/db/queries/content";
+import { resolveWhatsappNumber } from "@/lib/whatsapp";
 
 export const metadata: Metadata = {
   title: "Todos os produtos | Náutica Color",
@@ -17,7 +19,7 @@ export default async function ProdutosPage({
 }) {
   const { page: pageParam } = await searchParams;
   const page = Number(pageParam) || 1;
-  const all = await getAllProducts();
+  const [all, content] = await Promise.all([getAllProducts(), getSiteContent()]);
   const { items, page: currentPage, totalPages, total } = paginate(all, page);
 
   return (
@@ -34,7 +36,7 @@ export default async function ProdutosPage({
         </div>
 
         <div className="mt-8">
-          <ProductGrid products={items} />
+          <ProductGrid products={items} whatsappNumber={resolveWhatsappNumber(content.whatsapp_1)} />
         </div>
 
         <Pagination basePath="/produtos" page={currentPage} totalPages={totalPages} />

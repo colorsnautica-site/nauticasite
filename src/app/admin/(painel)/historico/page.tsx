@@ -1,5 +1,5 @@
 import { getRecentChanges } from "@/db/queries/changelog";
-import { undoAction } from "./actions";
+import { UndoButton } from "@/app/admin/(painel)/_components/UndoButton";
 
 export const dynamic = "force-dynamic";
 
@@ -21,10 +21,7 @@ export default async function AdminHistorico() {
                 {LABEL[c.entityType] ?? c.entityType}: <span className="font-medium">{String(nome)}</span>
                 <span className="ml-2 text-xs text-ink/50">{new Date(c.changedAt).toLocaleString("pt-BR")}</span>
               </div>
-              <form action={undoAction}>
-                <input type="hidden" name="logId" value={c.id} />
-                <button className="rounded-full border border-navy/20 px-3 py-1.5 text-xs font-semibold text-navy hover:bg-sky">Desfazer</button>
-              </form>
+              <UndoButton logId={c.id} disabled={c.status !== "undoable"} reason={c.statusReason} />
             </div>
           );
         })}

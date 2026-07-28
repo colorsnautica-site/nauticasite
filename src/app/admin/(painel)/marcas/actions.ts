@@ -1,31 +1,52 @@
 "use server";
-import { revalidateTag, revalidatePath } from "next/cache";
-import { eq } from "drizzle-orm";
-import { db } from "@/db/client";
-import { partnerBrands } from "@/db/schema";
-import { recordChange } from "@/db/changelog";
-import { uploadImage } from "@/lib/blob";
+
+import { revalidatePath, revalidateTag } from "next/cache";
+import { createPartnerBrand, deletePartnerBrand } from "@/db/mutations";
 import { BRANDS_TAG } from "@/db/queries/brands";
+import { actionErrorResult, type ActionResult, validationResult } from "@/lib/action-result";
+import { brandFormSchema, idSchema } from "@/lib/admin-validation";
+import { deleteImageBestEffort, uploadImage } from "@/lib/blob";
 import { requireAdminSession } from "@/lib/require-admin-session";
 
-function revalidate() { revalidateTag(BRANDS_TAG); revalidatePath("/"); }
-
-export async function createBrandAction(formData: FormData) {
-  await requireAdminSession();
-  const name = String(formData.get("name") ?? "").trim();
-  const file = formData.get("logo");
-  const logoUrl = file instanceof File && file.size > 0 ? await uploadImage(file, "marcas") : "";
-  const [after] = await db.insert(partnerBrands).values({ name, logoUrl, sortOrder: 999 }).returning();
-  await recordChange({ entityType: "partner_brand", entityId: String(after.id), action: "create", before: null, after });
-  revalidate();
+function revalidateBrands() {
+  revalidateTag(BRANDS_TAG);
+  revalidatePath("/");
+  revalidatePath("/admin/marcas");
 }
 
-export async function deleteBrandAction(formData: FormData) {
+export async function createBrandAction(_state: ActionResult, formData: FormData): Promise<ActionResult> {
   await requireAdminSession();
-  const id = Number(formData.get("id"));
-  const [before] = await db.select().from(partnerBrands).where(eq(partnerBrands.id, id));
-  if (!before) return;
-  await db.delete(partnerBrands).where(eq(partnerBrands.id, id));
-  await recordChange({ entityType: "partner_brand", entityId: String(id), action: "delete", before, after: null });
-  revalidate();
+  const file = formData.get("logo");
+  if (!(file instanceof File) || file.size === 0) {
+    return { status: "error", message: "Envie o logo da marca.", fieldErrors: { logo: ["O logo é obrigatório."] } };
+  }
+
+  let logoUrl: string | null = null;
+  try {
+    logoUrl = await uploadImage(file, "marcas");
+    const parsed = brandFormSchema.safeParse({ name: String(formData.get("name") ?? ""), logoUrl });
+    if (!parsed.success) {
+      await deleteImageBestEffort(logoUrl);
+      return validationResult(parsed.error);
+    }
+    await createPartnerBrand(parsed.data.name, parsed.data.logoUrl);
+    revalidateBrands();
+    return { status: "success", message: "Marca adicionada." };
+  } catch (error) {
+    await deleteImageBestEffort(logoUrl);
+    return actionErrorResult(error);
+  }
+}
+
+export async function deleteBrandAction(_state: ActionResult, formData: FormData): Promise<ActionResult> {
+  await requireAdminSession();
+  const parsedId = idSchema.safeParse(formData.get("id"));
+  if (!parsedId.success) return validationResult(parsedId.error);
+  try {
+    await deletePartnerBrand(parsedId.data);
+    revalidateBrands();
+    return { status: "success", message: "Marca removida. O logo foi mantido para permitir desfazer." };
+  } catch (error) {
+    return actionErrorResult(error);
+  }
 }

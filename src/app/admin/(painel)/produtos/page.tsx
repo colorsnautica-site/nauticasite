@@ -1,8 +1,7 @@
 import Link from "next/link";
 import { getAllProducts, categories, paginate } from "@/data/catalog";
 import { ProductRow } from "@/app/admin/(painel)/_components/ProductRow";
-import { ImageUploader } from "@/app/admin/(painel)/_components/ImageUploader";
-import { createProductAction } from "./actions";
+import { CreateProductForm } from "@/app/admin/(painel)/_components/CreateProductForm";
 
 export const dynamic = "force-dynamic";
 
@@ -34,17 +33,7 @@ export default async function AdminProdutos({
 
       <details className="mt-6 rounded-2xl bg-white p-4 shadow-sm">
         <summary className="cursor-pointer font-semibold text-navy">+ Adicionar produto</summary>
-        <form action={createProductAction} className="mt-4 grid gap-3 sm:grid-cols-[auto_2fr_1fr_1fr_1fr_1fr]">
-          <ImageUploader />
-          <input name="name" required placeholder="Nome" className="rounded-lg border border-navy/15 px-2 py-1.5 text-sm" />
-          <input name="brandName" placeholder="Marca" className="rounded-lg border border-navy/15 px-2 py-1.5 text-sm" />
-          <input name="precoReais" placeholder="Preço (R$)" className="rounded-lg border border-navy/15 px-2 py-1.5 text-sm" />
-          <select name="categorySlug" className="rounded-lg border border-navy/15 px-2 py-1.5 text-sm">
-            {categories.map((c) => <option key={c.slug} value={c.slug}>{c.name}</option>)}
-          </select>
-          <input name="sku" placeholder="Código (opcional)" className="rounded-lg border border-navy/15 px-2 py-1.5 text-sm" />
-          <button className="rounded-full bg-red px-4 py-2 text-xs font-semibold text-white">Adicionar</button>
-        </form>
+        <CreateProductForm categories={categories} />
       </details>
 
       <div className="mt-6 space-y-3">

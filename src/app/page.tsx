@@ -8,6 +8,7 @@ import { Eyebrow } from "@/components/Eyebrow";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { WhatsappIcon } from "@/components/WhatsappIcon";
 import { buildSupportMessage, resolveWhatsappNumber, whatsappUrl } from "@/lib/whatsapp";
+import { instagramUrl, normalizeBrazilPhone } from "@/lib/phone";
 import { getSiteContent } from "@/db/queries/content";
 import { getBrands } from "@/db/queries/brands";
 import { categories, getProductsByCategory } from "@/data/catalog";
@@ -23,7 +24,9 @@ import { FeaturedCategories, type FeaturedGroup } from "@/components/products/Fe
  * textos originais como fallback caso o banco ainda não tenha os valores.
  */
 export default async function LandingPage() {
-  const whatsappNumber = resolveWhatsappNumber();
+  const content = await getSiteContent();
+  const whatsappNumber = resolveWhatsappNumber(content.whatsapp_1);
+  const whatsappNumber2 = resolveWhatsappNumber(content.whatsapp_2);
   const supportUrl = whatsappUrl(buildSupportMessage(), whatsappNumber);
   const featuredGroups: FeaturedGroup[] = await Promise.all(
     categories.map(async (category) => ({
@@ -32,7 +35,6 @@ export default async function LandingPage() {
     }))
   );
 
-  const content = await getSiteContent();
   const brands = await getBrands();
   const store = {
     companyName: content.company_name || "Náutica Color",
@@ -117,7 +119,7 @@ export default async function LandingPage() {
               </p>
             </ScrollReveal>
             <ScrollReveal delay={180}>
-              <FeaturedCategories groups={featuredGroups} />
+              <FeaturedCategories groups={featuredGroups} whatsappNumber={whatsappNumber} />
             </ScrollReveal>
           </div>
         </section>
@@ -147,7 +149,7 @@ export default async function LandingPage() {
               <span>{store.location}</span>
               <span>
                 Telefone:{" "}
-                <a href={`tel:+55${store.phone.replace(/\D/g, "")}`} className="font-medium text-navy underline-offset-2 hover:text-red hover:underline">
+                <a href={`tel:${normalizeBrazilPhone(store.phone) ?? store.phone}`} className="font-medium text-navy underline-offset-2 hover:text-red hover:underline">
                   {store.phone}
                 </a>
               </span>
@@ -159,10 +161,18 @@ export default async function LandingPage() {
               </span>
               <span>
                 WhatsApp:{" "}
-                <a href={whatsappUrl(buildSupportMessage(), "5524993037332")} target="_blank" rel="noopener noreferrer" className="font-medium text-navy underline-offset-2 hover:text-red hover:underline">
+                <a href={whatsappUrl(buildSupportMessage(), whatsappNumber2)} target="_blank" rel="noopener noreferrer" className="font-medium text-navy underline-offset-2 hover:text-red hover:underline">
                   {store.whatsappVisible2}
                 </a>
               </span>
+              {instagramUrl(store.instagram) ? (
+                <span>
+                  Instagram:{" "}
+                  <a href={instagramUrl(store.instagram)!} target="_blank" rel="noopener noreferrer" className="font-medium text-navy underline-offset-2 hover:text-red hover:underline">
+                    {store.instagram}
+                  </a>
+                </span>
+              ) : null}
             </div>
 
             <a href={supportUrl} target="_blank" rel="noopener noreferrer" className="mt-7 inline-flex h-11 items-center justify-center gap-2 rounded-full bg-red px-5 text-sm font-semibold text-white transition hover:bg-red-bright">
@@ -172,7 +182,7 @@ export default async function LandingPage() {
         </section>
 
         <footer className="bg-navy py-8 text-center text-xs text-white/60">
-          <p>© Náutica Color · {store.location}</p>
+          <p>© {store.companyName} · {store.location}</p>
         </footer>
 
         <a href={supportUrl} target="_blank" rel="noopener noreferrer" aria-label="Falar com a Náutica Color pelo WhatsApp" className="fixed bottom-4 right-4 z-30 grid h-14 w-14 place-items-center text-red drop-shadow-lg transition hover:scale-110 hover:text-red-bright sm:bottom-6">
