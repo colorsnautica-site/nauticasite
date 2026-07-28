@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Search } from "lucide-react";
 import { getAllProducts, categories, paginate } from "@/data/catalog";
 import { ProductRow } from "@/app/admin/(painel)/_components/ProductRow";
 import { CreateProductForm } from "@/app/admin/(painel)/_components/CreateProductForm";
@@ -28,7 +29,13 @@ export default async function AdminProdutos({
           <option value="">Todas as categorias</option>
           {categories.map((c) => <option key={c.slug} value={c.slug}>{c.name}</option>)}
         </select>
-        <button className="rounded-full bg-navy px-5 py-2 text-sm font-semibold text-white">Filtrar</button>
+        <button
+          type="submit"
+          className="inline-flex items-center justify-center gap-2 rounded-full bg-navy px-5 py-2 text-sm font-semibold text-white transition hover:bg-navy/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy/35 focus-visible:ring-offset-2"
+        >
+          <Search size={16} aria-hidden="true" />
+          Buscar
+        </button>
       </form>
 
       <div className="mt-6">
