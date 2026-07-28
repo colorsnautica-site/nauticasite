@@ -36,7 +36,7 @@ export default async function AdminProdutos({
         <CreateProductForm categories={categories} />
       </details>
 
-      <div className="mt-6 space-y-3">
+      <div className="mt-6 grid grid-cols-1 items-start gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {pageData.items.map((p) => <ProductRow key={p.id} product={p} categories={categories} />)}
       </div>
 
