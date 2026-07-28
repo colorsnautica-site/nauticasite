@@ -64,7 +64,7 @@ test("valida campos e exibe mensagens operacionais", async ({ page }) => {
   await login(page);
   await page.goto("/admin/produtos");
   await page.getByText("+ Adicionar produto").click();
-  const createForm = page.locator("details form");
+  const createForm = page.getByRole("dialog", { name: "Adicionar produto" }).locator("form");
   await createForm.locator('input[name="name"]').fill("Produto inválido");
   await createForm.locator('input[name="precoReais"]').fill("12.50");
   await createForm.getByRole("button", { name: "Adicionar" }).click();
@@ -75,7 +75,7 @@ test("upload válido, arquivo disfarçado e arquivo acima de 5 MB", async ({ pag
   await login(page);
   await page.goto("/admin/produtos");
   await page.getByText("+ Adicionar produto").click();
-  const form = page.locator("details form");
+  const form = page.getByRole("dialog", { name: "Adicionar produto" }).locator("form");
   await form.locator('input[name="name"]').fill("Produto com foto E2E");
   await form.locator('input[name="sku"]').fill("E2E-FOTO");
   await form.locator('input[type="file"]').setInputFiles({ name: "foto.png", mimeType: "image/png", buffer: Buffer.from([0x89,0x50,0x4e,0x47,0x0d,0x0a,0x1a,0x0a,0,0,0,0]) });
@@ -97,7 +97,7 @@ test("fluxo produto, site, histórico e desfazer", async ({ page }) => {
   await login(page);
   await page.goto("/admin/produtos");
   await page.getByText("+ Adicionar produto").click();
-  const form = page.locator("details form");
+  const form = page.getByRole("dialog", { name: "Adicionar produto" }).locator("form");
   await form.locator('input[name="name"]').fill("Produto para desfazer E2E");
   await form.locator('input[name="sku"]').fill("E2E-UNDO");
   await form.getByRole("button", { name: "Adicionar" }).click();
