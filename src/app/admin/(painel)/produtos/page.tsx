@@ -31,10 +31,9 @@ export default async function AdminProdutos({
         <button className="rounded-full bg-navy px-5 py-2 text-sm font-semibold text-white">Filtrar</button>
       </form>
 
-      <details className="mt-6 rounded-2xl bg-white p-4 shadow-sm">
-        <summary className="cursor-pointer font-semibold text-navy">+ Adicionar produto</summary>
+      <div className="mt-6">
         <CreateProductForm categories={categories} />
-      </details>
+      </div>
 
       <div className="mt-6 grid grid-cols-1 items-start gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {pageData.items.map((p) => <ProductRow key={p.id} product={p} categories={categories} />)}
