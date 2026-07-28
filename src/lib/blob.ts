@@ -2,6 +2,7 @@ import { del, put } from "@vercel/blob";
 import { PublicActionError } from "@/lib/action-result";
 
 export const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+const UPLOAD_TIMEOUT_MS = 20_000;
 const MIME_BY_SIGNATURE = {
   jpeg: "image/jpeg",
   png: "image/png",
@@ -44,8 +45,22 @@ export async function uploadImage(file: File, prefix: string): Promise<string> {
 
   const safePrefix = prefix.replace(/[^a-z0-9-]/gi, "-");
   const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "-").slice(-120) || `imagem.${detected}`;
-  const blob = await put(`${safePrefix}/${Date.now()}-${crypto.randomUUID()}-${safeName}`, file, { access: "public" });
-  return blob.url;
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), UPLOAD_TIMEOUT_MS);
+  try {
+    const blob = await put(`${safePrefix}/${Date.now()}-${crypto.randomUUID()}-${safeName}`, file, {
+      access: "public",
+      abortSignal: controller.signal
+    });
+    return blob.url;
+  } catch (error) {
+    if (controller.signal.aborted) {
+      throw new PublicActionError("O envio da imagem demorou demais. Tente novamente com um arquivo menor.");
+    }
+    throw error;
+  } finally {
+    clearTimeout(timeout);
+  }
 }
 
 export async function deleteImageBestEffort(url: string | null | undefined): Promise<void> {
