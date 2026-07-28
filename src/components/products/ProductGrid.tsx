@@ -2,9 +2,17 @@ import type { Product } from "@/data/catalog";
 import { productWhatsappUrl } from "@/lib/whatsapp";
 import { ProductCard } from "@/components/products/ProductCard";
 
-export function ProductGrid({ products, whatsappNumber }: { products: Product[]; whatsappNumber?: string }) {
+export function ProductGrid({
+  products,
+  whatsappNumber,
+  emptyMessage = "Nenhum produto encontrado nesta categoria."
+}: {
+  products: Product[];
+  whatsappNumber?: string;
+  emptyMessage?: string;
+}) {
   if (products.length === 0) {
-    return <p className="py-12 text-center text-sm text-ink/60">Nenhum produto encontrado nesta categoria.</p>;
+    return <p className="py-12 text-center text-sm text-ink/60">{emptyMessage}</p>;
   }
 
   return (
