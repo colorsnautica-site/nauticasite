@@ -2,7 +2,7 @@ import { createHash, timingSafeEqual } from "node:crypto";
 
 export function getAdminPassword(): string {
   const value = process.env.ADMIN_PASSWORD ?? "";
-  if (value.length < 14) throw new Error("ADMIN_PASSWORD deve ter pelo menos 14 caracteres.");
+  if (!value) throw new Error("ADMIN_PASSWORD não configurada.");
   return value;
 }
 
