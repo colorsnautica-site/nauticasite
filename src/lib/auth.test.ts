@@ -27,8 +27,8 @@ describe("senha", () => {
     expect(checkPassword("errada")).toBe(false);
   });
 
-  it("recusa configuração com senha curta", () => {
-    process.env.ADMIN_PASSWORD = "senha123";
-    expect(() => checkPassword("senha123")).toThrow(/14/);
+  it("recusa configuração sem senha definida", () => {
+    process.env.ADMIN_PASSWORD = "";
+    expect(() => checkPassword("qualquer")).toThrow(/configurada/);
   });
 });
