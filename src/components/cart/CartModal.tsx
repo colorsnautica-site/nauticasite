@@ -19,9 +19,18 @@ export function CartModal({ onClose }: { onClose: () => void }) {
       </h2>
 
       {items.length === 0 ? (
-        <p className="mt-4 text-sm text-ink/60">
-          Seu carrinho está vazio. Adicione produtos no catálogo para montar seu pedido.
-        </p>
+        <>
+          <p className="mt-4 text-sm text-ink/60">
+            Seu carrinho está vazio. Adicione produtos no catálogo para montar seu pedido.
+          </p>
+          <button
+            type="button"
+            onClick={onClose}
+            className="mt-6 flex h-11 w-full items-center justify-center rounded-full border border-navy/15 text-sm font-semibold text-navy transition hover:bg-navy/5"
+          >
+            Continuar comprando
+          </button>
+        </>
       ) : (
         <>
           <ul className="mt-4 flex max-h-[50vh] flex-col gap-3 overflow-y-auto pr-1">
@@ -83,6 +92,13 @@ export function CartModal({ onClose }: { onClose: () => void }) {
             >
               Finalizar no WhatsApp
             </a>
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex h-11 w-full items-center justify-center rounded-full border border-navy/15 text-sm font-semibold text-navy transition hover:bg-navy/5"
+            >
+              Continuar comprando
+            </button>
             <button
               type="button"
               onClick={clear}
