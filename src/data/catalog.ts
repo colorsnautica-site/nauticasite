@@ -7,7 +7,7 @@
 // para um placeholder generico ate as fotos oficiais serem cadastradas.
 // ───────────────────────────────────────────────────────────────────────────
 
-import { getAllProductsDb, getProductsByCategoryDb } from "@/db/queries/products";
+import { getAllProductsDb, getProductBySkuDb, getProductsByCategoryDb } from "@/db/queries/products";
 
 export type StockStatus = "available" | "on_request";
 
@@ -51,6 +51,10 @@ export async function getProductsByCategory(slug: string): Promise<Product[]> {
 
 export async function getAllProducts(): Promise<Product[]> {
   return getAllProductsDb();
+}
+
+export async function getProductBySku(categorySlug: string, identifier: string): Promise<Product | undefined> {
+  return getProductBySkuDb(categorySlug, identifier);
 }
 
 export type Page<T> = {
