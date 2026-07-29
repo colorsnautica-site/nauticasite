@@ -9,8 +9,13 @@ import { Modal } from "@/components/ui/Modal";
 import { useCart } from "@/components/cart/CartContext";
 
 export function CartModal({ onClose }: { onClose: () => void }) {
-  const { items, totalCents, whatsappNumber, updateQuantity, removeProduct, clear } = useCart();
+  const { items, totalCents, whatsappNumber, closeProductModal, updateQuantity, removeProduct, clear } = useCart();
   const checkoutUrl = whatsappUrl(buildCartMessage(items), whatsappNumber);
+
+  const continueShopping = () => {
+    closeProductModal?.();
+    onClose();
+  };
 
   return (
     <Modal onClose={onClose} labelledBy="cart-modal-title">
@@ -25,7 +30,7 @@ export function CartModal({ onClose }: { onClose: () => void }) {
           </p>
           <button
             type="button"
-            onClick={onClose}
+            onClick={continueShopping}
             className="mt-6 flex h-11 w-full items-center justify-center rounded-full border border-navy/15 text-sm font-semibold text-navy transition hover:bg-navy/5"
           >
             Continuar comprando
@@ -94,7 +99,7 @@ export function CartModal({ onClose }: { onClose: () => void }) {
             </a>
             <button
               type="button"
-              onClick={onClose}
+              onClick={continueShopping}
               className="flex h-11 w-full items-center justify-center rounded-full border border-navy/15 text-sm font-semibold text-navy transition hover:bg-navy/5"
             >
               Continuar comprando

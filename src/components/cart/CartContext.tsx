@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useMemo, useReducer, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useReducer, useState, type ReactNode } from "react";
 import type { Product } from "@/data/catalog";
 import {
   addItem,
@@ -27,6 +27,8 @@ type CartContextValue = {
   clear: () => void;
   openCart: () => void;
   closeCart: () => void;
+  closeProductModal: (() => void) | null;
+  setProductModalCloser: (closer: (() => void) | null) => void;
 };
 
 const CartContext = createContext<CartContextValue | null>(null);
@@ -58,6 +60,13 @@ function reducer(state: CartState, action: Action): CartState {
 export function CartProvider({ children, whatsappNumber }: { children: ReactNode; whatsappNumber: string }) {
   const [state, dispatch] = useReducer(reducer, { items: [] });
   const [isOpen, setIsOpen] = useState(false);
+  const [productModalCloser, setProductModalCloserState] = useState<{ close: (() => void) | null }>({ close: null });
+  // Referencia estavel: se recriada a cada render, o useEffect que a chama
+  // em InterceptedModalCloser (deps: [setProductModalCloser]) dispara de
+  // novo a cada atualizacao de productModalCloser, causando loop infinito.
+  const setProductModalCloser = useCallback((closer: (() => void) | null) => {
+    setProductModalCloserState({ close: closer });
+  }, []);
 
   // Le o carrinho salvo so depois de montar no navegador, pra nao divergir
   // do HTML renderizado no servidor (que sempre comeca vazio).
@@ -90,9 +99,11 @@ export function CartProvider({ children, whatsappNumber }: { children: ReactNode
       removeProduct: (productId) => dispatch({ type: "remove", productId }),
       clear: () => dispatch({ type: "clear" }),
       openCart: () => setIsOpen(true),
-      closeCart: () => setIsOpen(false)
+      closeCart: () => setIsOpen(false),
+      closeProductModal: productModalCloser.close,
+      setProductModalCloser
     }),
-    [state, whatsappNumber, isOpen]
+    [state, whatsappNumber, isOpen, productModalCloser, setProductModalCloser]
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
