@@ -23,3 +23,8 @@ export const getProductsByCategoryDb = unstable_cache(
   },
   ["products-by-category"], { tags: [PRODUCTS_TAG] }
 );
+
+export async function getProductBySkuDb(categorySlug: string, identifier: string): Promise<Product | undefined> {
+  const rows = await getProductsByCategoryDb(categorySlug);
+  return rows.find((product) => product.sku === identifier) ?? rows.find((product) => product.id === identifier);
+}

@@ -5,8 +5,6 @@ import { ProductGrid } from "@/components/products/ProductGrid";
 import { Pagination } from "@/components/products/Pagination";
 import { ProductSearch } from "@/components/products/ProductSearch";
 import { categories, getAllProducts, paginate } from "@/data/catalog";
-import { getSiteContent } from "@/db/queries/content";
-import { resolveWhatsappNumber } from "@/lib/whatsapp";
 
 export const metadata: Metadata = {
   title: "Todos os produtos | Náutica Color",
@@ -20,7 +18,7 @@ export default async function ProdutosPage({
 }) {
   const { page: pageParam, q = "" } = await searchParams;
   const page = Number(pageParam) || 1;
-  const [all, content] = await Promise.all([getAllProducts(), getSiteContent()]);
+  const all = await getAllProducts();
   const query = q.trim();
   const normalizedQuery = normalizeSearch(query);
   const filtered = normalizedQuery
@@ -49,7 +47,6 @@ export default async function ProdutosPage({
         <div className="mt-8">
           <ProductGrid
             products={items}
-            whatsappNumber={resolveWhatsappNumber(content.whatsapp_1)}
             emptyMessage={query ? "Nenhum produto encontrado para essa busca." : undefined}
           />
         </div>
