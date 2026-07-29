@@ -7,8 +7,6 @@ import { CategoryTabs } from "@/components/products/CategoryTabs";
 import { ProductGrid } from "@/components/products/ProductGrid";
 import { Pagination } from "@/components/products/Pagination";
 import { categories, getCategoryBySlug, getProductsByCategory, paginate } from "@/data/catalog";
-import { getSiteContent } from "@/db/queries/content";
-import { resolveWhatsappNumber } from "@/lib/whatsapp";
 
 export function generateStaticParams() {
   return categories.map((category) => ({ categoria: category.slug }));
@@ -41,7 +39,7 @@ export default async function CategoriaPage({
 
   const { page: pageParam } = await searchParams;
   const page = Number(pageParam) || 1;
-  const [products, content] = await Promise.all([getProductsByCategory(categoria), getSiteContent()]);
+  const products = await getProductsByCategory(categoria);
   const { items, page: currentPage, totalPages, total } = paginate(products, page);
 
   return (
@@ -64,7 +62,7 @@ export default async function CategoriaPage({
         </div>
 
         <div className="mt-8">
-          <ProductGrid products={items} whatsappNumber={resolveWhatsappNumber(content.whatsapp_1)} />
+          <ProductGrid products={items} />
         </div>
 
         <Pagination basePath={`/produtos/${categoria}`} page={currentPage} totalPages={totalPages} />

@@ -49,6 +49,10 @@ export default async function LandingPage() {
   const heroDescription =
     content.hero_description ||
     "Tintas, antifouling, acabamentos e abrasivos de alta performance. Escolha o produto e fale direto com a equipe pelo WhatsApp.";
+  const heroTitleSuffix = "em um só lugar";
+  const hasStyledSuffix = heroTitle.toLocaleLowerCase("pt-BR").endsWith(heroTitleSuffix);
+  const heroTitleLead = hasStyledSuffix ? heroTitle.slice(0, -heroTitleSuffix.length).trim() : heroTitle;
+  const heroTitleAccent = hasStyledSuffix ? heroTitle.slice(-heroTitleSuffix.length) : "";
 
   return (
     <>
@@ -67,7 +71,17 @@ export default async function LandingPage() {
           <div className="relative z-10 mx-auto flex min-h-[680px] max-w-7xl flex-col items-start justify-center gap-8 px-4 pb-52 pt-24 text-left sm:px-6 lg:px-8">
             <div className="max-w-3xl">
               <h1 className="animate-fade-up font-heading text-3xl font-extrabold leading-[1.1] [animation-delay:80ms] sm:text-4xl lg:text-5xl">
-                {heroTitle}
+                {heroTitleAccent ? (
+                  <>
+                    <span className="block text-[1.375rem] sm:text-[1.75rem] lg:text-[2.125rem]">{heroTitleLead}</span>
+                    <span
+                      className="mt-1 block text-[2.75rem] sm:text-[3.25rem] lg:text-[3.75rem]"
+                      style={{ fontFamily: "var(--font-fraunces)" }}
+                    >
+                      {heroTitleAccent}
+                    </span>
+                  </>
+                ) : heroTitle}
               </h1>
               <p className="mt-5 max-w-2xl animate-fade-up text-[0.9rem] leading-7 text-white/80 [animation-delay:160ms]">
                 {heroDescription}
@@ -119,7 +133,7 @@ export default async function LandingPage() {
               </p>
             </ScrollReveal>
             <ScrollReveal delay={180}>
-              <FeaturedCategories groups={featuredGroups} whatsappNumber={whatsappNumber} />
+              <FeaturedCategories groups={featuredGroups} />
             </ScrollReveal>
           </div>
         </section>

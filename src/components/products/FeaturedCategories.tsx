@@ -19,7 +19,7 @@ export type FeaturedGroup = {
  * o catálogo inteiro. Recebe do server só uma prévia por categoria (não o
  * catálogo inteiro) para manter o payload do client leve.
  */
-export function FeaturedCategories({ groups, whatsappNumber }: { groups: FeaturedGroup[]; whatsappNumber?: string }) {
+export function FeaturedCategories({ groups }: { groups: FeaturedGroup[] }) {
   const [activeSlug, setActiveSlug] = useState(groups[0]?.category.slug ?? "");
   const active = groups.find((group) => group.category.slug === activeSlug) ?? groups[0];
 
@@ -43,7 +43,7 @@ export function FeaturedCategories({ groups, whatsappNumber }: { groups: Feature
       </div>
 
       <div className="mt-8">
-        <ProductGrid products={active.products} whatsappNumber={whatsappNumber} />
+        <ProductGrid products={active.products} />
       </div>
 
       <div className="mt-8 flex justify-center">
