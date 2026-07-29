@@ -2,12 +2,19 @@ import { defineConfig, devices } from "@playwright/test";
 import { config } from "dotenv";
 
 config({ path: ".env.local" });
-const productionUrl = process.env.DATABASE_URL?.trim();
 const testUrl = process.env.TEST_DATABASE_URL?.trim();
 if (!testUrl) throw new Error("TEST_DATABASE_URL é obrigatória para E2E.");
-if (productionUrl && productionUrl === testUrl) throw new Error("TEST_DATABASE_URL não pode ser igual a DATABASE_URL.");
-process.env.__ORIGINAL_DATABASE_URL = productionUrl;
-process.env.DATABASE_URL = testUrl;
+
+// Guarda contra reavaliação deste módulo (ex: Playwright reimportando o
+// config num worker filho): sem isso, a segunda avaliação compararia
+// DATABASE_URL (já trocada pela primeira) com ela mesma e sempre falharia.
+if (!process.env.__E2E_ENV_SWAPPED) {
+  const productionUrl = process.env.DATABASE_URL?.trim();
+  if (productionUrl && productionUrl === testUrl) throw new Error("TEST_DATABASE_URL não pode ser igual a DATABASE_URL.");
+  process.env.__ORIGINAL_DATABASE_URL = productionUrl;
+  process.env.DATABASE_URL = testUrl;
+  process.env.__E2E_ENV_SWAPPED = "1";
+}
 
 export default defineConfig({
   testDir: "./tests/e2e",
