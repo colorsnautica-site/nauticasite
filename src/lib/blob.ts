@@ -1,7 +1,7 @@
 import { del, put } from "@vercel/blob";
 import { PublicActionError } from "@/lib/action-result";
 
-export const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
 const UPLOAD_TIMEOUT_MS = 20_000;
 const MIME_BY_SIGNATURE = {
   jpeg: "image/jpeg",

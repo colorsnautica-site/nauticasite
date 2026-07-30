@@ -1,4 +1,4 @@
-export function centsToReais(cents: number) {
+function centsToReais(cents: number) {
   return cents / 100;
 }
 
