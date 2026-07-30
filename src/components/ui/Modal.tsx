@@ -1,8 +1,9 @@
 "use client";
 
 import { createPortal } from "react-dom";
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
+import { useDialogBehavior } from "@/hooks/useDialogBehavior";
 
 // Mesma curva usada nas outras animações do site (tailwind.config.ts: transitionTimingFunction.nautica).
 const NAUTICA_EASE = [0.16, 1, 0.3, 1] as const;
@@ -27,54 +28,14 @@ export function Modal({
   children: React.ReactNode;
   labelledBy?: string;
 }) {
-  const closeButtonRef = useRef<HTMLButtonElement>(null);
-  const modalRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(true);
   const shouldReduceMotion = useReducedMotion();
   const requestClose = () => setOpen(false);
+  const { closeButtonRef, containerRef: modalRef } = useDialogBehavior<HTMLDivElement>(requestClose);
 
   useEffect(() => {
     setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    closeButtonRef.current?.focus();
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        requestClose();
-        return;
-      }
-
-      if (event.key !== "Tab") return;
-
-      const focusableElements = modalRef.current?.querySelectorAll<HTMLElement>(
-        'button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [href], [tabindex]:not([tabindex="-1"])'
-      );
-      if (!focusableElements?.length) return;
-
-      const firstElement = focusableElements[0];
-      const lastElement = focusableElements[focusableElements.length - 1];
-
-      if (event.shiftKey && document.activeElement === firstElement) {
-        event.preventDefault();
-        lastElement.focus();
-      } else if (!event.shiftKey && document.activeElement === lastElement) {
-        event.preventDefault();
-        firstElement.focus();
-      }
-    };
-
-    document.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      document.removeEventListener("keydown", handleKeyDown);
-    };
   }, []);
 
   if (!mounted) return null;
@@ -85,9 +46,6 @@ export function Modal({
       initial={{ opacity: 0 }}
       animate={{ opacity: open ? 1 : 0 }}
       transition={{ duration: shouldReduceMotion ? 0 : 0.2, ease: NAUTICA_EASE }}
-      onAnimationComplete={() => {
-        if (!open) onClose();
-      }}
       onClick={(event) => {
         if (event.target === event.currentTarget) requestClose();
       }}
@@ -100,6 +58,9 @@ export function Modal({
         initial={{ opacity: 0, scale: 0.92, y: 12 }}
         animate={open ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.92, y: 12 }}
         transition={{ duration: shouldReduceMotion ? 0 : 0.32, ease: NAUTICA_EASE }}
+        onAnimationComplete={() => {
+          if (!open) onClose();
+        }}
         className="relative w-full max-w-lg rounded-3xl bg-white p-6 shadow-2xl sm:p-8"
       >
         <button

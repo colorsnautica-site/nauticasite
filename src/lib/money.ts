@@ -1,3 +1,5 @@
+// Conversão de preço para os FORMULÁRIOS do painel admin (campo de texto <-> centavos).
+// Para formatar preço para EXIBIÇÃO no site (cliente), veja src/lib/currency.ts.
 export const MAX_PRICE_CENTS = 999_999_999;
 
 // Formato brasileiro inequívoco: 1234, 1.234, 1234,56 ou 1.234,56.

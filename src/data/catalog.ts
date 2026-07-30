@@ -9,7 +9,7 @@
 
 import { getAllProductsDb, getProductBySkuDb, getProductsByCategoryDb } from "@/db/queries/products";
 
-export type StockStatus = "available" | "on_request";
+type StockStatus = "available" | "on_request";
 
 export type Product = {
   id: string;

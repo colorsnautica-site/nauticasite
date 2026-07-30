@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { verifySessionToken, SESSION_COOKIE } from "@/lib/auth";
+import { verifySessionToken, SESSION_COOKIE } from "@/lib/auth/auth";
 
 // Reforço de sessão dentro das Server Actions: o middleware protege a rota,
 // mas uma Server Action pode ser invocada diretamente (POST com o ID da action),

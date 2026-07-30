@@ -1,6 +1,6 @@
 import { createHash, timingSafeEqual } from "node:crypto";
 
-export function getAdminPassword(): string {
+function getAdminPassword(): string {
   const value = process.env.ADMIN_PASSWORD ?? "";
   if (!value) throw new Error("ADMIN_PASSWORD não configurada.");
   return value;
