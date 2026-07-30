@@ -5,20 +5,21 @@ import { Minus, Plus, Trash2 } from "lucide-react";
 import { buildCartMessage } from "@/lib/cart";
 import { formatCurrency, formatPriceLabel } from "@/lib/currency";
 import { whatsappUrl } from "@/lib/whatsapp";
-import { Modal } from "@/components/ui/Modal";
+import { Modal, useRequestModalClose } from "@/components/ui/Modal";
 import { useCart } from "@/components/cart/CartContext";
 
-export function CartModal({ onClose }: { onClose: () => void }) {
+function CartModalContent() {
   const { items, totalCents, whatsappNumber, closeProductModal, updateQuantity, removeProduct, clear } = useCart();
+  const requestClose = useRequestModalClose();
   const checkoutUrl = whatsappUrl(buildCartMessage(items), whatsappNumber);
 
   const continueShopping = () => {
     closeProductModal?.();
-    onClose();
+    requestClose();
   };
 
   return (
-    <Modal onClose={onClose} labelledBy="cart-modal-title">
+    <>
       <h2 id="cart-modal-title" className="font-heading text-xl font-bold text-navy">
         Seu carrinho
       </h2>
@@ -92,7 +93,7 @@ export function CartModal({ onClose }: { onClose: () => void }) {
               href={checkoutUrl}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={onClose}
+              onClick={requestClose}
               className="flex h-11 w-full items-center justify-center rounded-full bg-red text-sm font-semibold text-white transition hover:bg-red-bright"
             >
               Finalizar no WhatsApp
@@ -114,6 +115,14 @@ export function CartModal({ onClose }: { onClose: () => void }) {
           </div>
         </>
       )}
+    </>
+  );
+}
+
+export function CartModal({ onClose }: { onClose: () => void }) {
+  return (
+    <Modal onClose={onClose} labelledBy="cart-modal-title">
+      <CartModalContent />
     </Modal>
   );
 }
