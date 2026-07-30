@@ -1,3 +1,5 @@
+// Formatação de preço para EXIBIÇÃO no site (cliente): carrinho, cards, detalhe de produto.
+// Para converter preço em campos de FORMULÁRIO do painel admin, veja src/lib/money.ts.
 function centsToReais(cents: number) {
   return cents / 100;
 }

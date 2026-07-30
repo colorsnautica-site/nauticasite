@@ -2,15 +2,15 @@
 
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { createSessionToken, SESSION_COOKIE, SESSION_MAX_AGE } from "@/lib/auth";
-import { checkPassword } from "@/lib/admin-password";
+import { createSessionToken, SESSION_COOKIE, SESSION_MAX_AGE } from "@/lib/auth/auth";
+import { checkPassword } from "@/lib/auth/admin-password";
 import {
   clearLoginAttempts,
   hashLoginIdentifier,
   loginIdentifierFromHeaders,
   loginIsBlocked,
   registerFailedLogin
-} from "@/lib/login-rate-limit";
+} from "@/lib/auth/login-rate-limit";
 
 const MIN_FAILURE_DURATION_MS = 750;
 

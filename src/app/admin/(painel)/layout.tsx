@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { AdminNav } from "@/app/admin/_components/AdminNav";
+import { AdminNav } from "./_components/AdminNav";
 
 export const dynamic = "force-dynamic"; // painel nunca é cacheado
 

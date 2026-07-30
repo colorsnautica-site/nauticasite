@@ -1,83 +1,62 @@
 "use client";
 
 import { createPortal } from "react-dom";
-import { useActionState, useCallback, useEffect, useId, useRef, useState } from "react";
+import { useActionState, useId, useRef, useState } from "react";
+import { motion, useReducedMotion } from "motion/react";
 import type { Category } from "@/data/catalog";
 import { INITIAL_ACTION_RESULT } from "@/lib/action-result";
 import { createProductAction } from "@/app/admin/(painel)/produtos/actions";
+import { useDialogBehavior } from "@/hooks/useDialogBehavior";
 import { ActionFeedback, FieldError } from "./ActionFeedback";
 import { ImageUploader } from "./ImageUploader";
 
 const fieldClassName =
   "mt-1.5 w-full rounded-xl border border-navy/15 bg-white px-3 py-2.5 text-sm text-ink outline-none transition focus:border-navy/40 focus:ring-4 focus:ring-navy/5";
 
-export function CreateProductForm({ categories }: { categories: Category[] }) {
+// Mesma curva usada no restante do site (tailwind.config.ts: transitionTimingFunction.nautica).
+const NAUTICA_EASE = [0.16, 1, 0.3, 1] as const;
+
+function CreateProductDialog({
+  categories,
+  titleId,
+  onClosed,
+  triggerRef
+}: {
+  categories: Category[];
+  titleId: string;
+  onClosed: () => void;
+  triggerRef: React.RefObject<HTMLButtonElement | null>;
+}) {
   const [result, action, pending] = useActionState(createProductAction, INITIAL_ACTION_RESULT);
-  const [open, setOpen] = useState(false);
-  const titleId = useId();
-  const triggerRef = useRef<HTMLButtonElement>(null);
-  const closeButtonRef = useRef<HTMLButtonElement>(null);
-  const modalRef = useRef<HTMLElement>(null);
+  const [visible, setVisible] = useState(true);
+  const shouldReduceMotion = useReducedMotion();
+  const requestClose = () => setVisible(false);
+  const { closeButtonRef, containerRef } = useDialogBehavior<HTMLElement>(requestClose);
 
-  const closeModal = useCallback(() => {
-    setOpen(false);
-    requestAnimationFrame(() => triggerRef.current?.focus());
-  }, []);
-
-  useEffect(() => {
-    if (!open) return;
-
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    closeButtonRef.current?.focus();
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        closeModal();
-        return;
-      }
-
-      if (event.key !== "Tab") return;
-
-      const focusableElements = modalRef.current?.querySelectorAll<HTMLElement>(
-        'button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [href], [tabindex]:not([tabindex="-1"])',
-      );
-
-      if (!focusableElements?.length) return;
-
-      const firstElement = focusableElements[0];
-      const lastElement = focusableElements[focusableElements.length - 1];
-
-      if (event.shiftKey && document.activeElement === firstElement) {
-        event.preventDefault();
-        lastElement.focus();
-      } else if (!event.shiftKey && document.activeElement === lastElement) {
-        event.preventDefault();
-        firstElement.focus();
-      }
-    };
-
-    document.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [closeModal, open]);
-
-  const modal = open ? (
-    <div
+  return createPortal(
+    <motion.div
       className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto bg-[#343342]/60 p-3 backdrop-blur-sm sm:p-6"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: visible ? 1 : 0 }}
+      transition={{ duration: shouldReduceMotion ? 0 : 0.2, ease: NAUTICA_EASE }}
       onMouseDown={(event) => {
-        if (event.target === event.currentTarget) closeModal();
+        if (event.target === event.currentTarget) requestClose();
       }}
     >
-      <section
-        ref={modalRef}
+      <motion.section
+        ref={containerRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
+        initial={{ opacity: 0, scale: 0.95, y: 12 }}
+        animate={visible ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.95, y: 12 }}
+        transition={{ duration: shouldReduceMotion ? 0 : 0.32, ease: NAUTICA_EASE }}
+        onAnimationComplete={() => {
+          if (!visible) {
+            onClosed();
+            requestAnimationFrame(() => triggerRef.current?.focus());
+          }
+        }}
         className="my-auto max-h-[calc(100vh-1.5rem)] w-full max-w-4xl overflow-y-auto rounded-[28px] bg-[#fcfcfd] shadow-[0_28px_90px_rgba(25,26,38,0.32)] sm:max-h-[calc(100vh-3rem)]"
       >
         <header className="sticky top-0 z-10 flex items-start justify-between gap-5 border-b border-navy/10 bg-[#fcfcfd]/95 px-5 py-5 backdrop-blur sm:px-7 sm:py-6">
@@ -91,7 +70,7 @@ export function CreateProductForm({ categories }: { categories: Category[] }) {
           <button
             ref={closeButtonRef}
             type="button"
-            onClick={closeModal}
+            onClick={requestClose}
             aria-label="Fechar cadastro"
             className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-navy/5 text-xl leading-none text-navy transition hover:bg-navy/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy/40"
           >
@@ -157,7 +136,7 @@ export function CreateProductForm({ categories }: { categories: Category[] }) {
             <div className="flex flex-col-reverse gap-2 pt-2 sm:col-span-2 sm:flex-row sm:justify-end">
               <button
                 type="button"
-                onClick={closeModal}
+                onClick={requestClose}
                 className="rounded-full px-5 py-2.5 text-sm font-semibold text-navy transition hover:bg-navy/5"
               >
                 Cancelar
@@ -171,9 +150,16 @@ export function CreateProductForm({ categories }: { categories: Category[] }) {
             </div>
           </div>
         </form>
-      </section>
-    </div>
-  ) : null;
+      </motion.section>
+    </motion.div>,
+    document.body
+  );
+}
+
+export function CreateProductForm({ categories }: { categories: Category[] }) {
+  const [open, setOpen] = useState(false);
+  const titleId = useId();
+  const triggerRef = useRef<HTMLButtonElement>(null);
 
   return (
     <>
@@ -188,7 +174,14 @@ export function CreateProductForm({ categories }: { categories: Category[] }) {
         + Adicionar produto
       </button>
 
-      {modal ? createPortal(modal, document.body) : null}
+      {open ? (
+        <CreateProductDialog
+          categories={categories}
+          titleId={titleId}
+          onClosed={() => setOpen(false)}
+          triggerRef={triggerRef}
+        />
+      ) : null}
     </>
   );
 }

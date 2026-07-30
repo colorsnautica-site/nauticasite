@@ -2,8 +2,8 @@ import { createHmac } from "node:crypto";
 import { and, eq, isNull, lt, or } from "drizzle-orm";
 import { db } from "@/db/client";
 import { adminLoginAttempts } from "@/db/schema";
-import { getSessionSecret } from "@/lib/auth";
-import { isLoginBlocked, nextFailedLoginState } from "@/lib/rate-limit-policy";
+import { getSessionSecret } from "@/lib/auth/auth";
+import { isLoginBlocked, nextFailedLoginState } from "@/lib/auth/rate-limit-policy";
 
 const RETENTION_MS = 24 * 60 * 60 * 1000;
 
