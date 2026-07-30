@@ -1,4 +1,5 @@
-import { SignJWT, jwtVerify } from "jose";
+import { SignJWT } from "jose/jwt/sign";
+import { jwtVerify } from "jose/jwt/verify";
 
 export const SESSION_COOKIE = "nautica_admin";
 const ALG = "HS256";
@@ -28,7 +29,8 @@ export async function verifySessionToken(token: string | undefined): Promise<boo
   try {
     const { payload } = await jwtVerify(token, secretBytes());
     return payload.role === "admin";
-  } catch {
+  } catch (error) {
+    console.error("Falha ao verificar sessão de admin:", error);
     return false;
   }
 }
