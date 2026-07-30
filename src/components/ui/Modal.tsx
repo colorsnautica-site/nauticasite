@@ -85,9 +85,6 @@ export function Modal({
       initial={{ opacity: 0 }}
       animate={{ opacity: open ? 1 : 0 }}
       transition={{ duration: shouldReduceMotion ? 0 : 0.2, ease: NAUTICA_EASE }}
-      onAnimationComplete={() => {
-        if (!open) onClose();
-      }}
       onClick={(event) => {
         if (event.target === event.currentTarget) requestClose();
       }}
@@ -100,6 +97,9 @@ export function Modal({
         initial={{ opacity: 0, scale: 0.92, y: 12 }}
         animate={open ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.92, y: 12 }}
         transition={{ duration: shouldReduceMotion ? 0 : 0.32, ease: NAUTICA_EASE }}
+        onAnimationComplete={() => {
+          if (!open) onClose();
+        }}
         className="relative w-full max-w-lg rounded-3xl bg-white p-6 shadow-2xl sm:p-8"
       >
         <button
